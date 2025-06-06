@@ -11,9 +11,18 @@ const categories = [
   { value: 'trendy', label: 'Modern Rizz', icon: Music }
 ] as const;
 
+// 定义类别类型
 type Category = typeof categories[number]['value'];
 
-const rizzLines: Record<Exclude<Category, 'all'>, string[]> = {
+// 定义 rizzLines 对象的键类型
+type RizzLineCategoryKey = 'classic' | 'smooth' | 'funny' | 'confident' | 'trendy';
+
+// 类型守卫函数
+function isRizzCategory(cat: Category): cat is RizzLineCategoryKey {
+  return cat !== 'all';
+}
+
+const rizzLines: Record<RizzLineCategoryKey, string[]> = {
   classic: [
     "Are you a magician? Because whenever I look at you, everyone else disappears.",
     "Do you have a map? I keep getting lost in your eyes.",
@@ -76,12 +85,7 @@ const rizzLines: Record<Exclude<Category, 'all'>, string[]> = {
   ]
 };
 
-function isRizzCategory(cat: string): cat is Exclude<Category, 'all'> {
-  return ['classic', 'smooth', 'funny', 'confident', 'trendy'].includes(cat);
-}
-
 const RizzGenerator = () => {
-  // 这是一个无关紧要的修改，用于触发新的 Vercel 部署
   const [currentLine, setCurrentLine] = useState('');
   const [category, setCategory] = useState<Category>('all');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -94,13 +98,8 @@ const RizzGenerator = () => {
 
       if (category === 'all') {
         availableLines = Object.values(rizzLines).flat();
-      } else if (isRizzCategory(category)) {
-        // 使用类型断言明确告诉 TS 这里的 category 是 rizzLines 的一个 key
-        availableLines = rizzLines[category as keyof typeof rizzLines];
       } else {
-        // Fallback for unexpected category values, though our type definition should prevent this.
-        console.error(`Unexpected category: ${category}`);
-        availableLines = Object.values(rizzLines).flat(); // Fallback to all lines
+        availableLines = rizzLines[category as keyof typeof rizzLines] || Object.values(rizzLines).flat();
       }
 
       const randomLine = availableLines[Math.floor(Math.random() * availableLines.length)];
