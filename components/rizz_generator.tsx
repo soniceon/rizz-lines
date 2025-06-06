@@ -88,8 +88,8 @@ const RizzGenerator = () => {
       let availableLines: string[] = [];
       if (category === 'all') {
         availableLines = Object.values(rizzLines).flat();
-      } else if (category in rizzLines) {
-        availableLines = rizzLines[category as keyof typeof rizzLines];
+      } else {
+        availableLines = rizzLines[category];
       }
       const randomLine = availableLines[Math.floor(Math.random() * availableLines.length)];
       setCurrentLine(randomLine);
