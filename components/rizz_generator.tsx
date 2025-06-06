@@ -91,22 +91,15 @@ const RizzGenerator = () => {
     setTimeout(() => {
       let availableLines: string[] = [];
 
-      // 直接判断 category 的具体值
       if (category === 'all') {
         availableLines = Object.values(rizzLines).flat();
+      } else if (isRizzCategory(category)) {
+        // 使用类型断言明确告诉 TS 这里的 category 是 rizzLines 的一个 key
+        availableLines = rizzLines[category as keyof typeof rizzLines];
       } else {
-        // 在这里，根据我们的逻辑，category 不可能是 'all' 了
-        // 考虑到 Vercel 的严格性，我们直接从 categories 列表中找到对应的 key 来索引 rizzLines
-        const selectedCategory = categories.find(cat => cat.value === category);
-
-        if (selectedCategory && selectedCategory.value !== 'all') {
-          // 确保找到了category并且它的值不是'all'
-          availableLines = rizzLines[selectedCategory.value];
-        } else {
-          // 理论上不应该走到这里，但作为回退
-          console.error(`Could not find lines for category: ${category}`);
-          availableLines = Object.values(rizzLines).flat(); // Fallback to all lines
-        }
+        // Fallback for unexpected category values, though our type definition should prevent this.
+        console.error(`Unexpected category: ${category}`);
+        availableLines = Object.values(rizzLines).flat(); // Fallback to all lines
       }
 
       const randomLine = availableLines[Math.floor(Math.random() * availableLines.length)];
