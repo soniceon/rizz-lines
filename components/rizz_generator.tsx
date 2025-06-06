@@ -93,7 +93,10 @@ const RizzGenerator = () => {
       if (category === 'all') {
         availableLines = Object.values(rizzLines).flat();
       } else if (isRizzCategory(category)) {
-        availableLines = rizzLines[category];
+        availableLines = rizzLines[category as keyof typeof rizzLines];
+      } else {
+        console.error(`Unexpected category: ${category}`);
+        availableLines = Object.values(rizzLines).flat();
       }
       const randomLine = availableLines[Math.floor(Math.random() * availableLines.length)];
       setCurrentLine(randomLine);
