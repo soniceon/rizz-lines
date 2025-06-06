@@ -1,83 +1,86 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Sparkles, Coffee, Music, Star, Zap, Share2, Users, Check, ArrowRight, Play } from 'lucide-react';
 
+// 定义所有可用类别类型
+const categories = [
+  { value: 'all', label: 'Best Rizz Lines', icon: Star },
+  { value: 'classic', label: 'Classic Rizz', icon: Heart },
+  { value: 'smooth', label: 'Smooth Rizz', icon: Coffee },
+  { value: 'funny', label: 'Funny Rizz', icon: Sparkles },
+  { value: 'confident', label: 'Bold Rizz', icon: Zap },
+  { value: 'trendy', label: 'Modern Rizz', icon: Music }
+] as const;
+
+type Category = typeof categories[number]['value'];
+
+const rizzLines: Record<Exclude<Category, 'all'>, string[]> = {
+  classic: [
+    "Are you a magician? Because whenever I look at you, everyone else disappears.",
+    "Do you have a map? I keep getting lost in your eyes.",
+    "If you were a vegetable, you'd be a cute-cumber.",
+    "Are you made of copper and tellurium? Because you're Cu-Te.",
+    "Is your name Google? Because you have everything I've been searching for.",
+    "Do you believe in love at first sight, or should I walk by again?",
+    "Are you a parking ticket? Because you've got 'fine' written all over you.",
+    "If you were a triangle, you'd be acute one.",
+    "Are you a time traveler? Because I see you in my future.",
+    "Do you have a Band-Aid? I just scraped my knee falling for you."
+  ],
+  smooth: [
+    "I must be a snowflake, because I've fallen for you.",
+    "Your smile is like sunshine on a cloudy day.",
+    "I'm not a photographer, but I can picture us together.",
+    "If kisses were snowflakes, I'd send you a blizzard.",
+    "You must be tired because you've been running through my mind all day.",
+    "I'd say God bless you, but it looks like he already did.",
+    "Are you a loan? Because you have my interest.",
+    "I'm not usually religious, but when I saw you, I knew angels were real.",
+    "If I could rearrange the alphabet, I'd put U and I together.",
+    "You're so beautiful, you made me forget my pickup line."
+  ],
+  funny: [
+    "Are you Wi-Fi? Because I'm really feeling a connection.",
+    "I'm not a hoarder, but I really want to keep you forever.",
+    "Are you my appendix? Because I don't understand how you work, but this feeling in my stomach makes me want to take you out.",
+    "I was wondering if you had an extra heart. Mine was just stolen.",
+    "Do you like Star Wars? Because Yoda one for me!",
+    "Are you a beaver? Because daaaaam.",
+    "I seem to have lost my phone number. Can I have yours?",
+    "Are you a 45-degree angle? Because you're acute-y.",
+    "I'm not a genie, but I can make your dreams come true.",
+    "Are you Australian? Because when I look at you, I feel like I'm down under your spell."
+  ],
+  confident: [
+    "I'm not saying you're the best catch here, but you're definitely the only one I'm interested in.",
+    "I don't usually approach people, but your energy is magnetic.",
+    "I had to come over here. My friends bet me I wouldn't be able to start a conversation with the most beautiful person in the room.",
+    "I'm not trying to impress you or anything, but I'm Batman.",
+    "I know this might sound crazy, but I think we'd look good together.",
+    "I'm not a betting person, but I'd put money on us having amazing chemistry.",
+    "I don't need a fortune teller to know you're going to be in my future.",
+    "I was going to wait for you to make the first move, but I'm impatient.",
+    "I'm not usually this direct, but life's too short for small talk.",
+    "I could spend all night thinking of the perfect thing to say to you, or I could just be honest: you're stunning."
+  ],
+  trendy: [
+    "Are you my screen time? Because I can't stop looking at you.",
+    "Are you a notification? Because you've got my attention.",
+    "If you were a Spotify playlist, you'd be my 'On Repeat'.",
+    "Are you a TikTok video? Because I could watch you all day.",
+    "You must be a premium subscription because you're everything I've been missing.",
+    "Are you 5G? Because you're giving me a strong connection.",
+    "If we were on Netflix, we'd definitely be trending.",
+    "Are you a software update? Because not right now, but maybe later?",
+    "You're like my favorite song - I never get tired of you.",
+    "Are you a meme? Because you're making me smile without even trying."
+  ]
+};
+
 const RizzGenerator = () => {
   const [currentLine, setCurrentLine] = useState('');
-  const [category, setCategory] = useState('all');
+  const [category, setCategory] = useState<Category>('all');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedCount, setGeneratedCount] = useState(0);
-
-  const rizzLines: Record<string, string[]> = {
-    classic: [
-      "Are you a magician? Because whenever I look at you, everyone else disappears.",
-      "Do you have a map? I keep getting lost in your eyes.",
-      "If you were a vegetable, you'd be a cute-cumber.",
-      "Are you made of copper and tellurium? Because you're Cu-Te.",
-      "Is your name Google? Because you have everything I've been searching for.",
-      "Do you believe in love at first sight, or should I walk by again?",
-      "Are you a parking ticket? Because you've got 'fine' written all over you.",
-      "If you were a triangle, you'd be acute one.",
-      "Are you a time traveler? Because I see you in my future.",
-      "Do you have a Band-Aid? I just scraped my knee falling for you."
-    ],
-    smooth: [
-      "I must be a snowflake, because I've fallen for you.",
-      "Your smile is like sunshine on a cloudy day.",
-      "I'm not a photographer, but I can picture us together.",
-      "If kisses were snowflakes, I'd send you a blizzard.",
-      "You must be tired because you've been running through my mind all day.",
-      "I'd say God bless you, but it looks like he already did.",
-      "Are you a loan? Because you have my interest.",
-      "I'm not usually religious, but when I saw you, I knew angels were real.",
-      "If I could rearrange the alphabet, I'd put U and I together.",
-      "You're so beautiful, you made me forget my pickup line."
-    ],
-    funny: [
-      "Are you Wi-Fi? Because I'm really feeling a connection.",
-      "I'm not a hoarder, but I really want to keep you forever.",
-      "Are you my appendix? Because I don't understand how you work, but this feeling in my stomach makes me want to take you out.",
-      "I was wondering if you had an extra heart. Mine was just stolen.",
-      "Do you like Star Wars? Because Yoda one for me!",
-      "Are you a beaver? Because daaaaam.",
-      "I seem to have lost my phone number. Can I have yours?",
-      "Are you a 45-degree angle? Because you're acute-y.",
-      "I'm not a genie, but I can make your dreams come true.",
-      "Are you Australian? Because when I look at you, I feel like I'm down under your spell."
-    ],
-    confident: [
-      "I'm not saying you're the best catch here, but you're definitely the only one I'm interested in.",
-      "I don't usually approach people, but your energy is magnetic.",
-      "I had to come over here. My friends bet me I wouldn't be able to start a conversation with the most beautiful person in the room.",
-      "I'm not trying to impress you or anything, but I'm Batman.",
-      "I know this might sound crazy, but I think we'd look good together.",
-      "I'm not a betting person, but I'd put money on us having amazing chemistry.",
-      "I don't need a fortune teller to know you're going to be in my future.",
-      "I was going to wait for you to make the first move, but I'm impatient.",
-      "I'm not usually this direct, but life's too short for small talk.",
-      "I could spend all night thinking of the perfect thing to say to you, or I could just be honest: you're stunning."
-    ],
-    trendy: [
-      "Are you my screen time? Because I can't stop looking at you.",
-      "Are you a notification? Because you've got my attention.",
-      "If you were a Spotify playlist, you'd be my 'On Repeat'.",
-      "Are you a TikTok video? Because I could watch you all day.",
-      "You must be a premium subscription because you're everything I've been missing.",
-      "Are you 5G? Because you're giving me a strong connection.",
-      "If we were on Netflix, we'd definitely be trending.",
-      "Are you a software update? Because not right now, but maybe later?",
-      "You're like my favorite song - I never get tired of you.",
-      "Are you a meme? Because you're making me smile without even trying."
-    ]
-  };
-
-  const categories = [
-    { value: 'all', label: 'Best Rizz Lines', icon: Star },
-    { value: 'classic', label: 'Classic Rizz', icon: Heart },
-    { value: 'smooth', label: 'Smooth Rizz', icon: Coffee },
-    { value: 'funny', label: 'Funny Rizz', icon: Sparkles },
-    { value: 'confident', label: 'Bold Rizz', icon: Zap },
-    { value: 'trendy', label: 'Modern Rizz', icon: Music }
-  ];
 
   const generateLine = () => {
     setIsGenerating(true);
@@ -86,7 +89,7 @@ const RizzGenerator = () => {
       if (category === 'all') {
         availableLines = Object.values(rizzLines).flat();
       } else {
-        availableLines = rizzLines[category];
+        availableLines = rizzLines[category as Exclude<Category, 'all'>];
       }
       const randomLine = availableLines[Math.floor(Math.random() * availableLines.length)];
       setCurrentLine(randomLine);
