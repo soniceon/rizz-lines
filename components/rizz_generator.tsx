@@ -81,6 +81,7 @@ function isRizzCategory(cat: string): cat is Exclude<Category, 'all'> {
 }
 
 const RizzGenerator = () => {
+  // 这是一个无关紧要的修改，用于触发新的 Vercel 部署
   const [currentLine, setCurrentLine] = useState('');
   const [category, setCategory] = useState<Category>('all');
   const [isGenerating, setIsGenerating] = useState(false);
