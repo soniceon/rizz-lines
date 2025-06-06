@@ -76,6 +76,10 @@ const rizzLines: Record<Exclude<Category, 'all'>, string[]> = {
   ]
 };
 
+function isRizzCategory(cat: string): cat is Exclude<Category, 'all'> {
+  return ['classic', 'smooth', 'funny', 'confident', 'trendy'].includes(cat);
+}
+
 const RizzGenerator = () => {
   const [currentLine, setCurrentLine] = useState('');
   const [category, setCategory] = useState<Category>('all');
@@ -88,7 +92,7 @@ const RizzGenerator = () => {
       let availableLines: string[] = [];
       if (category === 'all') {
         availableLines = Object.values(rizzLines).flat();
-      } else {
+      } else if (isRizzCategory(category)) {
         availableLines = rizzLines[category];
       }
       const randomLine = availableLines[Math.floor(Math.random() * availableLines.length)];
