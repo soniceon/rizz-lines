@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Sparkles, Coffee, Music, Star, Zap, Share2, Users, Check, ArrowRight, Play } from 'lucide-react';
+import Replicate from 'replicate';
+
+// Initialize Replicate client
+const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_TOKEN,
+});
 
 // 定义所有可用类别类型
 const categories = [
@@ -90,23 +96,65 @@ const RizzGenerator = () => {
   const [category, setCategory] = useState<Category>('all');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedCount, setGeneratedCount] = useState(0);
+  const [isAIGenerating, setIsAIGenerating] = useState(false);
 
-  const generateLine = () => {
-    setIsGenerating(true);
-    setTimeout(() => {
-      let availableLines: string[] = [];
+  const generateAILine = async () => {
+    try {
+      setIsAIGenerating(true);
+      // Call the backend API route instead of Replicate directly
+      const res = await fetch('/api/gpt4o', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: `Generate a creative and engaging pickup line in the style of ${category} category. Make it unique and memorable.`,
+          category: category
+        })
+      });
 
-      if (category === 'all') {
-        availableLines = Object.values(rizzLines).flat();
+      const data = await res.json();
+
+      if (res.ok && data.output) {
+        setCurrentLine(data.output);
+        setGeneratedCount(prev => prev + 1);
+        // Save the generated AI line
+        saveRizzLine(data.output, category);
       } else {
-        availableLines = rizzLines[category as keyof typeof rizzLines] || Object.values(rizzLines).flat();
+        console.error('Error from backend API:', data);
+        setCurrentLine(data.error || 'AI生成失败，请重试');
       }
+    } catch (error) {
+      console.error('Error calling backend API:', error);
+      setCurrentLine('AI生成出错');
+    } finally {
+      setIsAIGenerating(false);
+    }
+  };
 
-      const randomLine = availableLines[Math.floor(Math.random() * availableLines.length)];
-      setCurrentLine(randomLine);
-      setGeneratedCount(prev => prev + 1);
+  const generateLine = async () => {
+    setIsGenerating(true);
+    try {
+      // Always use AI generation for now to build history
+      await generateAILine();
+      
+    } finally {
       setIsGenerating(false);
-    }, 600);
+    }
+  };
+
+  // New function to call the save API
+  const saveRizzLine = async (line: string, category: Category) => {
+    try {
+      const res = await fetch('/api/save_rizz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ line, category })
+      });
+      if (!res.ok) {
+        console.error('Failed to save rizz line:', await res.json());
+      }
+    } catch (error) {
+      console.error('Error calling save API:', error);
+    }
   };
 
   const copyToClipboard = () => {
@@ -206,10 +254,11 @@ const RizzGenerator = () => {
                   </button>
                   <button
                     onClick={generateLine}
-                    disabled={isGenerating}
+                    disabled={isGenerating || isAIGenerating}
                     className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors font-medium flex items-center gap-2"
+                    translate="no"
                   >
-                    {isGenerating ? (
+                    {isGenerating || isAIGenerating ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                         Generating...
@@ -227,10 +276,11 @@ const RizzGenerator = () => {
             {/* Main CTA */}
             <button
               onClick={generateLine}
-              disabled={isGenerating}
+              disabled={isGenerating || isAIGenerating}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-xl text-xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+              translate="no"
             >
-              {isGenerating ? 'Generating Best Rizz Lines...' : 'Generate Rizz Lines That Work'}
+              {isGenerating || isAIGenerating ? 'Generating Best Rizz Lines...' : 'Generate Rizz Lines That Work'}
             </button>
             <p className="text-sm text-gray-500 mt-3">
               Generated {generatedCount} times • No registration required
