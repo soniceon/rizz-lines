@@ -8,11 +8,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@radix-ui/react-select": "^2.2.5",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.294.0",
     "next": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "replicate": "^1.0.1"
+    "replicate": "^1.0.1",
+    "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bestrizzlines.com/</loc>
+    <loc>https://www.rizzlines.org/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://bestrizzlines.com/#generator</loc>
+    <loc>https://www.rizzlines.org/#generator</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bestrizzlines.com/#how-it-works</loc>
+    <loc>https://www.rizzlines.org/#how-it-works</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://bestrizzlines.com/#examples</loc>
+    <loc>https://www.rizzlines.org/#examples</loc>
     <priority>0.7</priority>
   </url>
 </urlset> 

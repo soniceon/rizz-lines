@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Sparkles, Coffee, Music, Star, Zap, Share2, Users, Check, ArrowRight, Play } from 'lucide-react';
+import Link from 'next/link';
 import Replicate from 'replicate';
 
 // Initialize Replicate client
@@ -184,6 +185,7 @@ const RizzGenerator = () => {
               <a href="#generator" className="text-gray-700 hover:text-purple-600 font-medium">Generator</a>
               <a href="#how-it-works" className="text-gray-700 hover:text-purple-600 font-medium">How It Works</a>
               <a href="#examples" className="text-gray-700 hover:text-purple-600 font-medium">Examples</a>
+              <Link href="/articles" className="text-gray-700 hover:text-purple-600 font-medium">Articles</Link>
             </div>
           </nav>
         </div>
@@ -445,7 +447,7 @@ const RizzGenerator = () => {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="mb-2">© 2024 BestRizzLines.com - The ultimate pickup lines and rizz generator</p>
+          <p className="mb-2">© 2024 www.rizzlines.org - The ultimate pickup lines and rizz generator</p>
           <p className="text-sm text-gray-400">
             Best rizz lines • Pickup lines generator • Rizz up lines • Best rizz • Dating conversation starters
           </p>

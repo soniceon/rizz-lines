@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /api
 Allow: /
 
-Sitemap: https://bestrizzlines.com/sitemap.xml 
+Sitemap: https://www.rizzlines.org/sitemap.xml 
