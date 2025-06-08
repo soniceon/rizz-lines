@@ -114,8 +114,8 @@ const RizzGenerator = () => {
           <nav className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Heart className="text-purple-600 h-8 w-8" />
-              <h1 className="text-2xl font-bold text-gray-900">
-                <span className="text-purple-600">Best</span>RizzLines
+              <h1 className="text-2xl font-bold">
+                <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">RizzLines</span>
               </h1>
             </div>
             <div className="hidden md:flex items-center gap-6">
