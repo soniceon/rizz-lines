@@ -52,6 +52,7 @@ const RizzGenerator = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [rizzData, setRizzData] = useState<any>(null);
   const closeTimer = useRef<NodeJS.Timeout | null>(null);
+  const [copied, setCopied] = useState(false);
 
   // 动态加载 rizzlines.json
   useEffect(() => {
@@ -132,6 +133,8 @@ const RizzGenerator = () => {
   const copyToClipboard = () => {
     if (currentLine) {
       navigator.clipboard.writeText(currentLine);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -143,7 +146,7 @@ const RizzGenerator = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section with Core Functionality */}
-      <section className="bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 py-16">
+      <section id="generator" className="bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
             <span className="text-gray-900 font-extrabold mr-3">BEST</span>
@@ -201,10 +204,10 @@ const RizzGenerator = () => {
                 <div className="flex justify-center gap-3 flex-wrap">
                   <button
                     onClick={copyToClipboard}
-                    className="bg-white text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-50 transition-colors font-medium flex items-center gap-2"
+                    className={`bg-white px-4 py-2 rounded-lg transition-colors font-medium flex items-center gap-2 ${copied ? 'text-green-600' : 'text-purple-600 hover:bg-purple-50'}`}
                   >
-                    <Share2 size={16} />
-                    Copy Line
+                    {copied ? <Check size={16} /> : <Share2 size={16} />}
+                    {copied ? 'Copied!' : 'Copy Line'}
                   </button>
                   <button
                     onClick={generateLine}
@@ -396,9 +399,9 @@ const RizzGenerator = () => {
           <p className="text-xl mb-8 opacity-90">
             Join 500,000+ people who've improved their dating success with our proven rizz lines
           </p>
-          <a href="#generator" className="inline-block bg-white text-purple-600 px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-colors">
+          <Link href="/#generator" className="inline-block bg-white text-purple-600 px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-colors">
             Generate Your Best Rizz Lines Now
-          </a>
+          </Link>
         </div>
       </section>
     </div>

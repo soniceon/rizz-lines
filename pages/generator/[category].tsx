@@ -9,6 +9,8 @@ import fs from 'fs';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import SiteHeader from '../../components/SiteHeader';
 import SiteFooter from '../../components/SiteFooter';
+import { Button } from "../../@/components/ui/button";
+import { Copy, Check } from "lucide-react";
 
 // Helper function to generate a URL-friendly slug from a category name
 const slugify = (text: string) =>
@@ -48,6 +50,7 @@ const getRandomSubset = (array: string[], size: number) => {
 const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategories }) => {
   const router = useRouter();
   const [displayedLines, setDisplayedLines] = useState<string[]>([]);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (allLines) {
@@ -85,7 +88,7 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
         </div>
         
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-6">
             {displayedLines.map((line, index) => (
               <Card
                 key={index}
@@ -95,7 +98,28 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
                   <CardTitle className="text-lg font-bold text-purple-700">Rizz Line</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-800 text-base italic mb-2">"{line}"</p>
+                  <div className="flex items-center gap-3">
+                    <p className="text-gray-800 text-base italic mb-2 flex-1">"{line}"</p>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      className="shrink-0"
+                      onClick={() => {
+                        navigator.clipboard.writeText(line);
+                        setCopiedIndex(index);
+                        setTimeout(() => setCopiedIndex(null), 2000);
+                      }}
+                      title="Copy to clipboard"
+                    >
+                      {copiedIndex === index ? (
+                        <Check className="w-4 h-4 mr-1 text-green-500" />
+                      ) : (
+                        <Copy className="w-4 h-4 mr-1" />
+                      )}
+                      {copiedIndex === index ? 'Copied' : 'Copy'}
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}

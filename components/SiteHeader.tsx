@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState, useRef } from 'react';
 import { Heart } from 'lucide-react';
 import rizzData from '../rizzlines.json';
+import PixelHeartIcon from './PixelHeartIcon';
 
 // 动态获取内容最多的6个分类
 const categories = Object.entries(rizzData)
@@ -27,10 +28,10 @@ export default function SiteHeader() {
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <nav className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0">
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-purple-600"><svg width="32" height="32" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeWidth="2" d="M12 21s-7-5.686-7-10.5A4.5 4.5 0 0 1 12 6.5a4.5 4.5 0 0 1 7 4.001C19 15.314 12 21 12 21Z"/></svg></span>
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">RizzLines</span>
+              <span className="w-16 h-12 flex items-center justify-center align-middle" style={{lineHeight: 0}}><PixelHeartIcon size={48} /></span>
+              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent flex items-center">RizzLines</span>
             </Link>
           </div>
           <div className="hidden md:flex items-center gap-6">
@@ -46,8 +47,8 @@ export default function SiteHeader() {
                 </div>
               )}
             </div>
-            <a href="#how-it-works" className="text-gray-700 hover:text-purple-600 font-medium">How It Works</a>
-            <a href="#examples" className="text-gray-700 hover:text-purple-600 font-medium">Examples</a>
+            <Link href="/#how-it-works" className="text-gray-700 hover:text-purple-600 font-medium">How It Works</Link>
+            <Link href="/#examples" className="text-gray-700 hover:text-purple-600 font-medium">Examples</Link>
             <Link href="/articles" className="text-gray-700 hover:text-purple-600 font-medium">Articles</Link>
           </div>
         </nav>
