@@ -3,105 +3,41 @@ import SiteHeader from '../../components/SiteHeader';
 import SiteFooter from '../../components/SiteFooter';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useEffect, useState } from 'react';
 
 export default function Article88() {
-  const { t } = useTranslation('common');
-  const lines = [
-  "If I could rearrange the alphabet, I'd put \"U\" and \"I\" together.",
-  "You must be Wi-Fi, because I'm totally feeling a connection right now.",
-  "Does anyone need a light? Because we're the perfect match.",
-  "Even if there wasn't gravity, I'd still fall for you.",
-  "You and I are like the Billboard 100 — we're the hottest singles in the country.",
-  "Is it hot in here, or is it just you?",
-  "I'm not a photographer. But I totally picture us together.",
-  "You must be late returning your library books because you have \"fine\" written all over you.",
-  "Should I call you Darwin? Because you're totally my natural selection.",
-  "Excuse me, are you lost? The World's Sexist Man/Woman contest is next door.",
-  "You must be tired, because you've been running through my mind all day.",
-  "Can I just call you Google? Because you've got everything I'm looking for.",
-  "There must be something wrong with my eyes, because I can't seem to take them off you.",
-  "Do you have a map? I just got lost looking in your eyes.",
-  "Have we met? I think I saw you in my dreams.",
-  "Do you believe in love at first sight or should I walk by again?",
-  "I can predict the future. And you're in it.",
-  "Are you an artist? Because you're definitely drawing my attention.",
-  "You must be a legend, because I've heard so many great things about you.",
-  "I always thought happiness started with an \"h.\" But I just realized it begins with \"u.\"",
-  "I just finished a book I think you'd like. Why don't you stop by and pick it up?",
-  "I'm researching important dates in history and wondered if you'd like to be one of them.",
-  "Can I call you Waldo? Someone like you is impossible to find.",
-  "Can I borrow a kiss? I promise to give it back.",
-  "You know what I'd really love to see you in? My arms.",
-  "Are you a time traveler? Because I can see my future with you.",
-  "You must be a parking ticket because you've got fine written all over you.",
-  "If you were a keyboard, you'd be exactly my type.",
-  "Are you an investment? Because I'm putting all my time into you.",
-  "If life had a center, you'd be the sun I revolve around.",
-  "Are you a GPS? Because you always know how to lead me right to you.",
-  "Are you a magnet? Because I'm totally attracted to you.",
-  "Are you an Oreo? Because I'm dunking on this opportunity.",
-  "Are you a pencil? Because you're drawing me in.",
-  "There's no way your spirit animal isn't a phoenix; you've reignited my heart like magic.",
-  "Are you a breeze? Because you've swept me off my feet without a sound.",
-  "Sweet, irresistible, and impossible to get enough of- are you secretly a chocolate chip cookie?",
-  "Are you a bank loan? Because you've got my interest.",
-  "Are you a refrigerator? Because you're way too cool to ignore.",
-  "Are you a parking space? Because I've been searching for someone like you forever.",
-  "Who needs a library card when you've got \"check me out\" written all over you.",
-  "Are you a phone charger? Because I feel dead without you.",
-  "Are you a 5G network? Because you've got me connected instantly.",
-  "Do you know how to hack? Because you've stolen my heart completely.",
-  "My name is _______________, but feel free to call me Tonight or Tomorrow.",
-  "Is your fan club accepting new members? Because I'm about to sign up.",
-  "Are we in the self-service line? Because I'm totally checking you out.",
-  "If you were an ad, you'd be the fine print.",
-  "Are you a car loan? Because you've definitely got my interest.",
-  "I'd buy you a glass of wine, but then I'd be jealous of the glass.",
-  "My major is anatomy. Wanna help me study?",
-  "Do you have a name or can I call you mine?",
-  "Do you have a bandage? I just scraped my knee falling for you.",
-  "Can you guess what my shirt is made of? Girl/boyfriend material.",
-  "Can I walk you home? I've always believed in following my dreams.",
-  "I'm writing a book about numbers. I just realized I don't have yours.",
-  "Are you a camera? Because every time I look at you, I smile.",
-  "Do you like Legos? Because I think we could build a relationship together.",
-  "Did it hurt when you fell from heaven?",
-  "You must be a magnet. Because I feel the attraction.",
-  "Did someone break your heart? Because you can have mine.",
-  "I'd love to take you to a movie, but I don't want get in trouble for bringing my own snack.",
-  "Are you a broom? Because you just swept me off my feet.",
-  "You hand looks heavy. Can I hold it for you?",
-  "Have we met? Because you look a lot like my next girl/boyfriend.",
-  "I didn't believe in love at first sight. Until I saw you.",
-  "You're so spicy, you're giving me a bad case of heartburn.",
-  "If your dad a boxer? Because you're a real knockout.",
-  "Do you have the time? I lost track of it after I met you.",
-  "Can I be your snowflake? I promise to never melt away from your heart.",
-  "Are you French? Because Eiffel for you.",
-  "Are you a Wi-Fi signal? Because I'm feeling a strong connection.",
-  "No pen, no paper...but, you still draw my attention.",
-  "Are you a heart? Because I'd never stop beating for you.",
-  "I believe in following my dreams, so you lead the way.",
-  "If being beautiful was a crime, you'd be on the most wanted list.",
-  "Kissing is a love language. Want to start a conversation with me?",
-  "Are you iron? Because I don't get enough of you.",
-  "Should we get coffee? Cause I like you a latte.",
-  "You should be Jasmine without the \"Jas.",
-  "Are you a Disney ride? Because I'd wait forever for you.",
-  "Are you water? Because I'd die without you.",
-  "I see you like tequila. Does that mean you'll give me a shot?",
-  "Hey, I'm sorry to bother you, but my phone must be broken because it doesn't seem to have your number in it.",
-  "Are you a boxer? Because you're a total knockout.",
-  "Are you public speaking? Because you make me really nervous.",
-  "Are you good at math? Me neither; the only number I care about is yours.",
-  "I'm not religious, but you're the answer to all of my prayers."
-];
+  const { t, i18n } = useTranslation('common');
+  const [lines, setLines] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log('当前语言:', i18n.language);
+    fetch(`/locales/${i18n.language}/pickup-lines.json`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setLines(data);
+          console.log('lines数据(Array):', data);
+        } else if (typeof data === 'object') {
+          const arr = Object.keys(data)
+            .sort((a, b) => {
+              const na = parseInt(a.replace(/\D/g, ''), 10);
+              const nb = parseInt(b.replace(/\D/g, ''), 10);
+              return na - nb;
+            })
+            .map((k) => data[k]);
+          setLines(arr);
+          console.log('lines数据(Object):', arr);
+        }
+      });
+  }, [i18n.language]);
+
   const groups = [
-  { title: t('Funny Rizz Lines'), img: '/articles/1.jpg', alt: t('Funny Rizz Lines image'), start: 0, end: 22 },
-  { title: t('Romantic Rizz Lines'), img: '/articles/2.jpg', alt: t('Romantic Rizz Lines image'), start: 22, end: 44 },
-  { title: t('Bold Rizz Lines'), img: '/articles/3.jpg', alt: t('Bold Rizz Lines image'), start: 44, end: 66 },
-  { title: t('Classic Rizz Lines'), img: '/articles/4.jpg', alt: t('Classic Rizz Lines image'), start: 66, end: 88 }
-];
+    { title: t('funnyRizzLines'), img: '/articles/1.jpg', alt: t('funnyRizzLinesAlt'), start: 0, end: 22 },
+    { title: t('romanticRizzLines'), img: '/articles/2.jpg', alt: t('romanticRizzLinesAlt'), start: 22, end: 44 },
+    { title: t('boldRizzLines'), img: '/articles/3.jpg', alt: t('boldRizzLinesAlt'), start: 44, end: 66 },
+    { title: t('classicRizzLines'), img: '/articles/4.jpg', alt: t('classicRizzLinesAlt'), start: 66, end: 88 }
+  ];
+  console.log('groups:', groups);
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Head>
@@ -159,7 +95,7 @@ export default function Article88() {
             />
             <ol start={g.start + 1} className="list-decimal list-inside space-y-2 text-lg text-gray-800 bg-white rounded-xl p-6 shadow">
               {lines.slice(g.start, g.end).map((line, idx) => (
-                <li key={idx}>{t(line)}</li>
+                <li key={idx}>{line}</li>
               ))}
             </ol>
           </section>
@@ -179,9 +115,14 @@ export default function Article88() {
 }
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ['common'])),
-    },
-  };
+  try {
+    return {
+      props: {
+        ...(await serverSideTranslations(locale, ['common'])),
+      },
+    };
+  } catch (e) {
+    console.error('getStaticProps error in 88-corny-but-effective-pickup-lines.tsx:', e);
+    throw e;
+  }
 } 

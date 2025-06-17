@@ -1,4 +1,6 @@
 import Replicate from 'replicate';
+import fs from 'fs';
+import path from 'path';
 
 // 添加调试日志
 console.log('API Token:', process.env.REPLICATE_API_TOKEN ? 'Token exists' : 'Token is missing');
@@ -100,6 +102,25 @@ function getEnglishPrompt(category) {
       return 'A trendy pickup line using contemporary elements like "Are you 5G? Because you got me connected instantly"';
     default:
       return 'A creative pickup line';
+  }
+}
+
+// 在AI生成内容后自动存储到历史记录
+function saveToHistory(language, category, line) {
+  const dir = path.join(process.cwd(), 'public', 'locales', language);
+  const file = path.join(dir, 'history.json');
+  let history = {};
+  if (fs.existsSync(file)) {
+    try {
+      history = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    } catch (e) {
+      history = {};
+    }
+  }
+  if (!history[category]) history[category] = [];
+  if (!history[category].includes(line)) {
+    history[category].push(line);
+    fs.writeFileSync(file, JSON.stringify(history, null, 2), 'utf-8');
   }
 }
 
@@ -466,6 +487,9 @@ export default async function handler(req, res) {
     }
 
     const randomLine = availableLines[Math.floor(Math.random() * availableLines.length)];
+    
+    // 在AI生成内容后调用
+    saveToHistory(language, category, randomLine);
     
     return res.status(200).json({ output: randomLine });
   } catch (error) {

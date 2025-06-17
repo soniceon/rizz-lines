@@ -81,6 +81,10 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { t } = useTranslation();
 
+  console.log('category:', category);
+  console.log('allLines:', allLines);
+  console.log('allCategories:', allCategories);
+
   useEffect(() => {
     if (allLines) {
       setDisplayedLines(getRandomSubset(allLines, 5));
@@ -197,28 +201,33 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params, locale = 'en' }) => {
-  const category = Object.keys(rizzData as RizzCategory).find(cat => slugify(cat) === params?.category);
-  
-  if (!category) {
-    return {
-      notFound: true
-    };
-  }
-
-  const allLines = (rizzData as RizzCategory)[category];
-  const allCategories = Object.keys(rizzData as RizzCategory).map(cat => ({
-    name: cat,
-    slug: slugify(cat)
-  }));
-
-  return {
-    props: {
-      category,
-      allLines,
-      allCategories,
-      ...(await serverSideTranslations(locale, ['common']))
+  try {
+    const category = Object.keys(rizzData as RizzCategory).find(cat => slugify(cat) === params?.category);
+    console.log('getStaticProps category:', category);
+    if (!category) {
+      return {
+        notFound: true
+      };
     }
-  };
+    const allLines = (rizzData as RizzCategory)[category];
+    const allCategories = Object.keys(rizzData as RizzCategory).map(cat => ({
+      name: cat,
+      slug: slugify(cat)
+    }));
+    console.log('getStaticProps allLines:', allLines);
+    console.log('getStaticProps allCategories:', allCategories);
+    return {
+      props: {
+        category,
+        allLines,
+        allCategories,
+        ...(await serverSideTranslations(locale, ['common']))
+      }
+    };
+  } catch (e) {
+    console.error('getStaticProps error in [category].tsx:', e);
+    throw e;
+  }
 };
 
 export default RizzGeneratorPage; 
