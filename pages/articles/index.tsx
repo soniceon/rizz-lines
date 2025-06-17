@@ -1,39 +1,46 @@
 import Link from 'next/link';
-import React from 'react';
-import rizzData from '../../rizzlines.json';
+import React, { useEffect, useState } from 'react';
 import SiteHeader from '../../components/SiteHeader';
 import SiteFooter from '../../components/SiteFooter';
-
-const MAIN_CATEGORIES = [
-  'Smooth rizz lines',
-  'Funny rizz lines',
-  'Modern rizz lines',
-  'Bold rizz lines',
-  'Classic rizz lines',
-  'Best rizz lines',
-];
-const allCategories = Object.keys(rizzData).map(name => ({
-  label: name,
-  slug: name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-}));
-
-const articles = [
-  {
-    title: "88 Corny But Effective Pickup Lines",
-    slug: "88-corny-but-effective-pickup-lines",
-    summary: "A collection of 88 cheesy but effective pickup lines to boost your rizz.",
-  },
-  // 可继续添加其它文章
-];
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export default function ArticlesIndex() {
+  const { t, i18n } = useTranslation('common');
+  const [rizzData, setRizzData] = useState<any>(null);
+  useEffect(() => {
+    fetch(`/locales/${i18n.language}/rizzlines.json`)
+      .then(res => res.json())
+      .then(data => setRizzData(data));
+  }, [i18n.language]);
+
+  const allCategories = rizzData ? Object.keys(rizzData).map(name => ({
+    label: name,
+    slug: name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  })) : [];
+
+  const MAIN_CATEGORIES = [
+    t('smoothRizzLines'),
+    t('funnyRizzLines'),
+    t('modernRizzLines'),
+    t('boldRizzLines'),
+    t('classicRizzLines'),
+    t('bestRizzLines'),
+  ];
+  const articles = [
+    {
+      title: t('article88Title'),
+      slug: '88-corny-but-effective-pickup-lines',
+      summary: t('article88Desc'),
+    },
+  ];
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* 页面顶部插入<SiteHeader /> */}
       <SiteHeader />
       {/* 内容区 */}
       <main className="container mx-auto px-4 flex-1">
-        <h1 className="text-3xl font-bold mb-6 text-center">Articles</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">{t('articles')}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {articles.map((article) => (
             <Link key={article.slug} href={`/articles/${article.slug}`}
@@ -48,4 +55,12 @@ export default function ArticlesIndex() {
       <SiteFooter />
     </div>
   );
+}
+
+export async function getStaticProps({ locale }: { locale: string }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+    },
+  };
 } 
