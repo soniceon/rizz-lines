@@ -58,15 +58,22 @@ const CATEGORY_KEY_MAP: { [key: string]: string } = {
   'best': 'bestRizzLines',
 };
 
-// 分类value到json key的映射
-const CATEGORY_VALUE_TO_JSON_KEY: { [key: string]: string } = {
-  best: 'Best rizz lines',
-  classic: 'Classic Rizz Lines',
-  smooth: 'Smooth rizz lines',
-  funny: 'Funny Rizz Lines',
-  bold: 'Bold rizz lines',
-  modern: 'Modern rizz lines',
-};
+type Category = 
+  | 'best'
+  | 'classic'
+  | 'smooth'
+  | 'funny'
+  | 'bold'
+  | 'modern';
+
+const CATEGORY_VALUE_TO_JSON_KEY = {
+  'best': 'Best rizz lines',
+  'classic': 'Classic Rizz Lines',
+  'smooth': 'Smooth rizz lines',
+  'funny': 'Funny Rizz Lines',
+  'bold': 'Bold rizz lines',
+  'modern': 'Modern rizz lines'
+} as const;
 
 const MAIN_CATEGORY_KEYS = [
   "Rizz pick-up lines",
@@ -79,10 +86,23 @@ const MAIN_CATEGORY_KEYS = [
   "Cute Rizz Lines",
 ];
 
+// Helper function to generate a URL-friendly slug from a category name
+const slugify = (text: string) =>
+  text
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
+
 const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData }) => {
   const [currentLine, setCurrentLine] = useState('');
   const [category, setCategory] = useState<Category>('best');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [generatedCount, setGeneratedCount] = useState(0);
   const [isAIGenerating, setIsAIGenerating] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -107,119 +127,69 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
     { value: 'smooth', label: t('smoothRizzLines'), icon: '☕' },
     { value: 'funny', label: t('funnyRizzLines'), icon: '✨' },
     { value: 'bold', label: t('boldRizzLines'), icon: '⚡' },
-    { value: 'modern', label: t('modernRizzLines'), icon: '🎵' },
+    { value: 'modern', label: t('modernRizzLines'), icon: '🎵' }
   ] as const;
-  type Category = typeof categories[number]['value'];
 
-  // 默认选中 best
-  const [selectedCategory, setSelectedCategory] = useState<Category>('best');
-
-  const slugify = (text: string) =>
-    text
-      .toString()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '')
-      .replace(/--+/g, '-');
-
-  // 悬停时立即展开
-  const handleMenuEnter = () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setMenuOpen(true);
-  };
-  // 移出时延迟收起
-  const handleMenuLeave = () => {
-    closeTimer.current = setTimeout(() => setMenuOpen(false), 300);
-  };
-
-  const generateAILine = async () => {
+  // 从数据库获取随机内容
+  const getRandomLine = async () => {
     try {
-      setIsAIGenerating(true);
-      // Call the backend API route instead of Replicate directly
+      const res = await fetch(`/api/rizzlines?category=${category}&language=${i18n.language}`);
+      const data = await res.json();
+      
+      if (data && data.length > 0) {
+        setCurrentLine(data[0]);
+      }
+    } catch (error) {
+      console.error('Error fetching random line:', error);
+    }
+  };
+
+  // 处理分类变更
+  const handleCategoryChange = async (cat: Category) => {
+    setCategory(cat);
+    await getRandomLine();
+  };
+
+  // 生成新内容
+  const generateLine = async () => {
+    setIsGenerating(true);
+    try {
       const res = await fetch('/api/gpt4o', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: `${i18n.language === 'zh' ? '请用中文生成一句' : 'Generate a'}${t(categories.find(c => c.value === category)?.label || '')}${i18n.language === 'zh' ? '风格的创意搭讪话术，要有趣且有吸引力。' : ' creative and engaging pickup line in the style. Make it unique and memorable.'}`,
-          category: category,
+          prompt: `Generate a creative and engaging pickup line in the style of ${category} category. Make it unique and memorable.`,
+          category,
           language: i18n.language
         })
       });
 
       const data = await res.json();
-
-      if (res.ok && data.output) {
+      if (data.output) {
         setCurrentLine(data.output);
-        setGeneratedCount(prev => prev + 1);
-        // Save the generated AI line
-        saveRizzLine(data.output, category);
-      } else {
-        console.error('Error from backend API:', data);
-        setCurrentLine(data.error || 'AI生成失败，请重试');
       }
     } catch (error) {
-      console.error('Error calling backend API:', error);
-      setCurrentLine('AI生成出错');
-    } finally {
-      setIsAIGenerating(false);
-    }
-  };
-
-  const generateLine = async () => {
-    setIsGenerating(true);
-    try {
-      await generateAILine();
+      console.error('Error generating line:', error);
+      setCurrentLine(
+        i18n.language === 'zh' ? '生成失败，请重试' :
+        i18n.language === 'ja' ? '生成に失敗しました' :
+        i18n.language === 'ko' ? '생성 실패' :
+        'Generation failed'
+      );
     } finally {
       setIsGenerating(false);
     }
   };
 
-  // New function to call the save API
-  const saveRizzLine = async (line: string, category: Category) => {
-    try {
-      const res = await fetch('/api/save_rizz', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ line, category, language: i18n.language })
-      });
-      if (!res.ok) {
-        console.error('Failed to save rizz line:', await res.json());
-      }
-    } catch (error) {
-      console.error('Error calling save API:', error);
-    }
-  };
-
+  // 复制到剪贴板
   const copyToClipboard = () => {
-    if (currentLine) {
-      navigator.clipboard.writeText(currentLine);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+    navigator.clipboard.writeText(currentLine);
   };
 
-  const handleCategoryChange = async (cat: Category) => {
-    setCategory(cat);
-    if (rizzData) {
-      const jsonKey = CATEGORY_VALUE_TO_JSON_KEY[cat];
-      const lines = (rizzData[jsonKey] || []).filter((line: string) => line && line.trim() !== '');
-      if (lines.length > 0) {
-        const randomLine = lines[Math.floor(Math.random() * lines.length)];
-        if (typeof randomLine === 'string') setCurrentLine(randomLine);
-        return;
-      }
-    }
-    // 本地无内容，调用AI生成
-    await generateAILine();
-  };
-
+  // 首次加载和语言变更时获取随机数据
   useEffect(() => {
-    generateLine();
-    // eslint-disable-next-line
-  }, [category]);
+    getRandomLine();
+  }, [category, i18n.language]);
 
   // 动态获取内容最多的6个分类
   const topCategories = rizzData
@@ -403,7 +373,8 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
                     className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 font-semibold rounded-lg px-4 py-2 shadow hover:from-purple-200 hover:to-pink-200 transition-all flex items-center gap-1 mt-2"
                     onClick={() => {
                       const catPath = slugify(cat.name);
-                      window.location.href = `/generator/${catPath}`;
+                      const currentLang = i18n.language || 'en';
+                      window.location.href = `/${currentLang}/generator/${catPath}`;
                     }}
                   >
                     {t('tryThisLine')} <ArrowRight size={16} />

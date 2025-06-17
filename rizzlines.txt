@@ -80,7 +80,7 @@ If being beautiful was a crime, you'd be on the most wanted list.
 Kissing is a love language. Want to start a conversation with me?
 Are you iron? Because I don't get enough of you.
 Should we get coffee? Cause I like you a latte.
-You should be Jasmine without the "Jas.
+You should be Jasmine without the "Jas."
 Are you a Disney ride? Because I'd wait forever for you.
 Are you water? Because I'd die without you.
 I see you like tequila. Does that mean you'll give me a shot?
@@ -97,7 +97,7 @@ Are you the Krabby Patty formula? Because I'm trying to steal you.
 Is your name Chamomile? Because you're a hot-tea!
 Are you Legos? Because I'd never lego of you.
 Do you work for NASA? Because your beauty is out of this world.
-Math is so confusing. It's always talking about "x and y" and never "you and I.
+Math is so confusing. It's always talking about "x and y" and never "you and I."
 You look a lot like my next girlfriend/boyfriend/partner.
 If I had a nickel for every time I saw someone as cute as you, I’d have 5 cents.
 Look, I’ve been blinded by your beauty. My insurance company is going to need your name and number.
@@ -902,7 +902,7 @@ Flirty Pick Up Lines:
 I have a phone number, you have a phone number—think of the possibilities.
 I've got all these forks and knives all I need is a little spoon.
 Your hand looks heavy, can I hold it for you?
-I always thought happiness started with an "H" but it looks like it starts with "U.
+I always thought happiness started with an "H" but it looks like it starts with "U."
 Do you have a map? I just got lost in your eyes.
 Did you just come out of an oven? Because you're too hot to handle.
 I think we've met before. Actually, never mind—I think it was just in my dreams.
@@ -925,3 +925,5 @@ My mom told me not to talk to strangers online, but I'll make an exception for y
 Did you go to school at Hogwarts? Because I'm feeling the magic.
 I'm really glad I just bought life insurance because when I saw you, my heart stopped.
 If you were a vegetable, you'd be a cute-cumber.
+
+

@@ -8,10 +8,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { line, category } = req.body;
+  const { line, category, language } = req.body;
 
-  if (!line || !category) {
-    return res.status(400).json({ error: 'Missing line or category in request body' });
+  if (!line || !category || !language) {
+    return res.status(400).json({ error: 'Missing line, category, or language in request body' });
   }
 
   try {
@@ -20,14 +20,24 @@ export default async function handler(req, res) {
     const history = JSON.parse(historyData);
 
     // Check for duplicates before adding
-    const isDuplicate = history.some(item => item.line === line);
+    const isDuplicate = history.some(item => 
+      item.line === line && 
+      item.category === category && 
+      item.language === language
+    );
+    
     if (isDuplicate) {
       console.log('Duplicate rizz line, not saving:', line);
       return res.status(200).json({ message: 'Rizz line already exists' });
     }
 
-    // Add new entry
-    history.push({ line, category, timestamp: new Date().toISOString() });
+    // Add new entry with language information
+    history.push({ 
+      line, 
+      category, 
+      language,
+      timestamp: new Date().toISOString() 
+    });
 
     // Write updated data back to the file
     fs.writeFileSync(historyFilePath, JSON.stringify(history, null, 2), 'utf-8');

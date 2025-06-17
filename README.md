@@ -1,35 +1,84 @@
-# Rizz Line Generator
+# Rizz Lines Generator
 
-A fun Python script that generates creative and humorous pickup lines.
+一个多语言情话生成器，支持多种语言和多种风格。
 
-## Features
+## 功能特点
 
-- Generates random pickup lines using various templates
-- Includes chemistry puns, pop culture references, and more
-- Easy to use and extend
+- 支持6种不同风格的情话：
+  - 最佳情话 (Best)
+  - 经典情话 (Classic)
+  - 圆滑情话 (Smooth)
+  - 搞笑情话 (Funny)
+  - 大胆情话 (Bold)
+  - 现代情话 (Modern)
 
-## Installation
+- 支持多种语言：
+  - 英语 (English)
+  - 中文 (Chinese)
+  - 日语 (Japanese)
+  - 韩语 (Korean)
+  - 法语 (French)
+  - 德语 (German)
+  - 俄语 (Russian)
+  - 西班牙语 (Spanish)
+  - 葡萄牙语 (Portuguese)
 
-1. Clone this repository
-2. Install the required dependencies:
-```bash
-pip install -r requirements.txt
+## 工作原理
+
+1. 首次加载：
+   - 每个分类从预设的 `rizzlines.json` 数据库中随机选择一条对应语言的情话
+   - 确保初始展示的内容符合所选语言
+
+2. 生成新内容：
+   - 点击"生成新的"按钮时，调用 API 生成新的情话
+   - 新生成的内容会自动保存到数据库中
+   - 支持多语言自动翻译
+
+## 项目结构
+
+```
+├── components/
+│   └── rizz_generator.tsx    # 主要组件
+├── pages/
+│   └── api/
+│       └── rizzlines.js      # API 实现
+├── public/
+│   └── rizzlines.json        # 数据库文件
+├── CURSORRULES.md           # 实现逻辑说明
+└── README.md                # 项目说明
 ```
 
-## Usage
+## 开发指南
 
-Run the script using Python:
-```bash
-python rizz_generator.py
+1. 数据库结构 (`rizzlines.json`):
+```json
+{
+  "Rizz pick-up lines": [
+    {
+      "en": "English version",
+      "zh": "中文版本",
+      "ja": "日本語版",
+      // ... 其他语言
+    }
+  ]
+}
 ```
 
-## Contributing
+2. API 使用:
+```typescript
+// 获取特定分类和语言的情话
+GET /api/rizzlines?category=best&language=zh
 
-Feel free to add more templates and variations to make the pickup lines even more creative!
+// 生成新的情话
+POST /api/generate?category=best&language=zh
+```
 
-## License
+## 注意事项
 
-MIT License
+1. 初始加载时使用预设数据库中的内容
+2. 新生成的内容会自动保存到数据库
+3. 确保所有生成的内容都有对应的多语言翻译
+4. 保持数据库文件格式的一致性
 
 # SEO Optimization Guide for Rizz Lines Articles
 

@@ -13,6 +13,23 @@ import { Button } from "../../@/components/ui/button";
 import { Copy, Check } from "lucide-react";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import rizzData from '../../rizzlines.json';
+
+interface RizzLine {
+  en: string;
+  zh: string;
+  fr: string;
+  de: string;
+  ja: string;
+  ko: string;
+  ru: string;
+  es: string;
+  pt: string;
+}
+
+interface RizzCategory {
+  [key: string]: RizzLine[];
+}
 
 // Helper function to generate a URL-friendly slug from a category name
 const slugify = (text: string) =>
@@ -28,44 +45,39 @@ const slugify = (text: string) =>
 
 // Helper function to de-slugify a URL component back to a title
 const unslugify = (slug: string) => {
-    const words = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1));
-    return words.join(' ');
-}
-
-
-interface RizzData {
-  [key: string]: string[];
-}
+  const words = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1));
+  return words.join(' ');
+};
 
 interface PageProps {
   category: string;
-  allLines: string[];
-  allCategories: string[];
+  allLines: RizzLine[];
+  allCategories: { name: string; slug: string; }[];
 }
 
 // Function to get a random subset of an array
-const getRandomSubset = (array: string[], size: number) => {
+const getRandomSubset = <T,>(array: T[], size: number): T[] => {
   const shuffled = [...array].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, size);
 };
 
 const CATEGORY_KEY_MAP: { [key: string]: string } = {
-  'Best rizz lines': 'bestRizzLines',
-  'Classic rizz lines': 'classicRizzLines',
-  'Smooth rizz lines': 'smoothRizzLines',
-  'Funny rizz lines': 'funnyRizzLines',
-  'Bold rizz lines': 'boldRizzLines',
-  'Modern rizz lines': 'modernRizzLines',
-  'Cheesy Rizz Lines': 'cheesyRizzLines',
-  'Rizz pick-up lines': 'rizzPickupLines',
-  'Cute Rizz Lines': 'cuteRizzLines',
-  'Dirty Pickup Lines to Use on Girl Over Text': 'dirtyPickupLinesToUseOnGirlOverText',
-  'Dirty Pickup Lines to Make Her Laugh': 'dirtyPickupLinesToMakeHerLaugh',
+  'best rizz lines': 'bestRizzLines',
+  'classic rizz lines': 'classicRizzLines',
+  'smooth rizz lines': 'smoothRizzLines',
+  'funny rizz lines': 'funnyRizzLines',
+  'bold rizz lines': 'boldRizzLines',
+  'modern rizz lines': 'modernRizzLines',
+  'cheesy rizz lines': 'cheesyRizzLines',
+  'rizz pick-up lines': 'rizzPickupLines',
+  'cute rizz lines': 'cuteRizzLines',
+  'dirty pickup lines to use on girl over text': 'dirtyPickupLinesToUseOnGirlOverText',
+  'dirty pickup lines to make her laugh': 'dirtyPickupLinesToMakeHerLaugh',
 };
 
 const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategories }) => {
   const router = useRouter();
-  const [displayedLines, setDisplayedLines] = useState<string[]>([]);
+  const [displayedLines, setDisplayedLines] = useState<RizzLine[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { t } = useTranslation();
 
@@ -83,8 +95,10 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
     return <div>Loading...</div>;
   }
 
-  const pageTitle = `${t(CATEGORY_KEY_MAP[category] || category)} | ${t('rizzLineGenerator')}`;
-  const metaDescription = t('metaDescription', { category: t(CATEGORY_KEY_MAP[category] || category) });
+  const categoryKey = CATEGORY_KEY_MAP[category.toLowerCase()] || category;
+  const translatedCategory = t(categoryKey);
+  const pageTitle = `${translatedCategory} | ${t('rizzLineGenerator')}`;
+  const metaDescription = t('metaDescription', { category: translatedCategory });
 
   return (
     <>
@@ -100,53 +114,48 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
 
       <main className="container mx-auto px-4 py-12">
         <div className="text-center mb-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-3">{t(CATEGORY_KEY_MAP[category] || category)} {t('generator')}</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-3">{translatedCategory} {t('generator')}</h1>
           <p className="text-lg text-gray-600">{t('clickToGetRandomLines')}</p>
         </div>
         
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col gap-6">
             {displayedLines.map((line, index) => {
-              let text = '';
               const { locale } = router;
-              if (typeof line === 'string') {
-                text = line;
-              } else if (typeof line === 'object' && line !== null) {
-                text = line[locale as string] || line['en'] || '';
-              }
+              const text = line[locale as keyof RizzLine] || line.en;
               return (
-              <Card
-                key={index}
-                className="bg-gradient-to-br from-purple-100 via-pink-100 to-indigo-100 shadow-xl rounded-2xl transition-transform hover:scale-105 border-0"
-              >
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-bold text-purple-700">{t('rizzLine')}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-3">
+                <Card
+                  key={index}
+                  className="bg-gradient-to-br from-purple-100 via-pink-100 to-indigo-100 shadow-xl rounded-2xl transition-transform hover:scale-105 border-0"
+                >
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg font-bold text-purple-700">{t('rizzLine')}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-3">
                       <p className="text-gray-800 text-base italic mb-2 flex-1">"{text}"</p>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="secondary"
-                      className="shrink-0"
-                      onClick={() => {
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="secondary"
+                        className="shrink-0"
+                        onClick={() => {
                           navigator.clipboard.writeText(text);
-                        setCopiedIndex(index);
-                        setTimeout(() => setCopiedIndex(null), 2000);
-                      }}
-                      title={t('copyToClipboard')}
-                    >
-                      {copiedIndex === index ? (
-                        <Check className="w-4 h-4 mr-1 text-green-500" />
-                      ) : (
-                        <Copy className="w-4 h-4 mr-1" />
-                      )}
-                      {copiedIndex === index ? t('copied') : t('copy')}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                          setCopiedIndex(index);
+                          setTimeout(() => setCopiedIndex(null), 2000);
+                        }}
+                        title={t('copyToClipboard')}
+                      >
+                        {copiedIndex === index ? (
+                          <Check className="w-4 h-4 mr-1 text-green-500" />
+                        ) : (
+                          <Copy className="w-4 h-4 mr-1" />
+                        )}
+                        {copiedIndex === index ? t('copied') : t('copy')}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
@@ -167,42 +176,48 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async (context) => {
-  const { locales } = context;
-  const filePath = path.join(process.cwd(), 'rizzlines.json');
-  const jsonData = fs.readFileSync(filePath, 'utf-8');
-  const data: RizzData = JSON.parse(jsonData);
-  const categories = Object.keys(data);
+export const getStaticPaths: GetStaticPaths = async () => {
+  const categories = Object.keys(rizzData as RizzCategory).map(cat => ({
+    name: cat,
+    slug: slugify(cat)
+  }));
 
-  // 为每个语言都生成路径
-  const paths = locales!.flatMap((locale) =>
-    categories.map(category => ({
-    params: { category: slugify(category) },
-      locale,
+  const locales = ['en', 'zh', 'ja', 'ko', 'fr', 'de', 'ru', 'es', 'pt'];
+  const paths = locales.flatMap(locale => 
+    categories.map(cat => ({
+      params: { category: cat.slug },
+      locale
     }))
   );
 
-  return { paths, fallback: false };
+  return {
+    paths,
+    fallback: false
+  };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
-  const categorySlug = params?.category as string;
-  // 读取当前语言的 rizzlines.json
-  const filePath = path.join(process.cwd(), 'public', 'locales', locale as string, 'rizzlines.json');
-  const jsonData = fs.readFileSync(filePath, 'utf-8');
-  const data: RizzData = JSON.parse(jsonData);
+export const getStaticProps: GetStaticProps = async ({ params, locale = 'en' }) => {
+  const category = Object.keys(rizzData as RizzCategory).find(cat => slugify(cat) === params?.category);
+  
+  if (!category) {
+    return {
+      notFound: true
+    };
+  }
 
-  const originalCategoryName = Object.keys(data).find(k => slugify(k) === categorySlug) || "Unknown";
-  const allLines = data[originalCategoryName] || [];
-  const allCategories = Object.keys(data);
+  const allLines = (rizzData as RizzCategory)[category];
+  const allCategories = Object.keys(rizzData as RizzCategory).map(cat => ({
+    name: cat,
+    slug: slugify(cat)
+  }));
 
   return {
     props: {
-      category: unslugify(categorySlug),
+      category,
       allLines,
       allCategories,
-      ...(await serverSideTranslations(locale as string, ['common'])),
-    },
+      ...(await serverSideTranslations(locale, ['common']))
+    }
   };
 };
 
