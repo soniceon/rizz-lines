@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "check:slugs": "node check_rizzlines_slugs.js",
+    "build": "npm run check:slugs && next build",
     "start": "next start"
   },
   "dependencies": {

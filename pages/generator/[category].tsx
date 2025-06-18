@@ -185,15 +185,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
     name: cat,
     slug: slugify(cat)
   }));
-
+  const validCategories = categories.filter(cat => 
+    cat.slug && 
+    cat.slug !== '' && 
+    cat.slug !== '-'
+  );
   const locales = ['en', 'zh', 'ja', 'ko', 'fr', 'de', 'ru', 'es', 'pt'];
   const paths = locales.flatMap(locale => 
-    categories.map(cat => ({
+    validCategories.map(cat => ({
       params: { category: cat.slug },
       locale
     }))
   );
-
   return {
     paths,
     fallback: false
@@ -201,33 +204,26 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params, locale = 'en' }) => {
-  try {
-    const category = Object.keys(rizzData as RizzCategory).find(cat => slugify(cat) === params?.category);
-    console.log('getStaticProps category:', category);
-    if (!category) {
-      return {
-        notFound: true
-      };
-    }
-    const allLines = (rizzData as RizzCategory)[category];
-    const allCategories = Object.keys(rizzData as RizzCategory).map(cat => ({
-      name: cat,
-      slug: slugify(cat)
-    }));
-    console.log('getStaticProps allLines:', allLines);
-    console.log('getStaticProps allCategories:', allCategories);
-    return {
-      props: {
-        category,
-        allLines,
-        allCategories,
-        ...(await serverSideTranslations(locale, ['common']))
-      }
-    };
-  } catch (e) {
-    console.error('getStaticProps error in [category].tsx:', e);
-    throw e;
+  const category = Object.keys(rizzData as RizzCategory).find(cat => slugify(cat) === params?.category);
+  if (!category) {
+    throw new Error('Category not found for params: ' + JSON.stringify(params));
   }
+  const allLines = (rizzData as RizzCategory)[category];
+  if (!allLines || allLines.length === 0) {
+    throw new Error('allLines is empty for category: ' + category);
+  }
+  const allCategories = Object.keys(rizzData as RizzCategory).map(cat => ({
+    name: cat,
+    slug: slugify(cat)
+  }));
+  return {
+    props: {
+      category,
+      allLines,
+      allCategories,
+      ...(await serverSideTranslations(locale, ['common']))
+    }
+  };
 };
 
 export default RizzGeneratorPage; 
