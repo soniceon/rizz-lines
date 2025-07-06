@@ -98,6 +98,31 @@ const slugify = (text: string) =>
     .replace(/[^\w-]+/g, '')
     .replace(/--+/g, '-');
 
+const RIZZ_DAILY_LIMIT = 5;
+
+const getToday = () => new Date().toISOString().slice(0, 10);
+
+function getLocalCount() {
+  const key = 'rizz_gen_count';
+  const today = getToday();
+  const data = JSON.parse(localStorage.getItem(key) || '{}');
+  if (data.date !== today) {
+    localStorage.setItem(key, JSON.stringify({ date: today, count: 0 }));
+    return 0;
+  }
+  return data.count || 0;
+}
+function incLocalCount() {
+  const key = 'rizz_gen_count';
+  const today = getToday();
+  const data = JSON.parse(localStorage.getItem(key) || '{}');
+  if (data.date !== today) {
+    localStorage.setItem(key, JSON.stringify({ date: today, count: 1 }));
+  } else {
+    localStorage.setItem(key, JSON.stringify({ date: today, count: (data.count || 0) + 1 }));
+  }
+}
+
 const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData }) => {
   const [currentLine, setCurrentLine] = useState('');
   const [category, setCategory] = useState<Category>('best');
@@ -111,6 +136,11 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
   const [copied, setCopied] = useState(false);
   const { t, i18n } = useTranslation('common');
   const lang = i18n.language || 'en';
+  const [usedCount, setUsedCount] = useState(0);
+
+  useEffect(() => {
+    setUsedCount(getLocalCount());
+  }, []);
 
   useEffect(() => {
     if (!propRizzData) {
@@ -130,12 +160,11 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
     { value: 'modern', label: t('modernRizzLines'), icon: '🎵' }
   ] as const;
 
-  // 从数据库获取随机内容
+  // 本地数据获取
   const getRandomLine = async () => {
     try {
       const res = await fetch(`/api/rizzlines?category=${category}&language=${i18n.language}`);
       const data = await res.json();
-      
       if (data && data.length > 0) {
         setCurrentLine(data[0]);
       }
@@ -144,14 +173,18 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
     }
   };
 
-  // 处理分类变更
+  // 切换风格时自动展示本地数据
   const handleCategoryChange = async (cat: Category) => {
     setCategory(cat);
     await getRandomLine();
   };
 
-  // 生成新内容
-  const generateLine = async () => {
+  // 只有AI生成才计数
+  const generateLineAI = async () => {
+    if (usedCount >= RIZZ_DAILY_LIMIT) {
+      alert('今日免费额度已用完，请明天再来！');
+      return;
+    }
     setIsGenerating(true);
     try {
       const res = await fetch('/api/gpt4o', {
@@ -163,10 +196,17 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
           language: i18n.language
         })
       });
-
+      if (res.status === 429) {
+        alert('今日免费额度已用完，请明天再来！');
+        setUsedCount(RIZZ_DAILY_LIMIT);
+        setIsGenerating(false);
+        return;
+      }
       const data = await res.json();
       if (data.output) {
         setCurrentLine(data.output);
+        incLocalCount();
+        setUsedCount(getLocalCount());
       }
     } catch (error) {
       console.error('Error generating line:', error);
@@ -186,7 +226,7 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
     navigator.clipboard.writeText(currentLine);
   };
 
-  // 首次加载和语言变更时获取随机数据
+  // 首次加载和切换风格时展示本地数据
   useEffect(() => {
     getRandomLine();
   }, [category, i18n.language]);
@@ -265,10 +305,18 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
                     className={`bg-white px-4 py-2 rounded-lg transition-colors font-medium flex items-center gap-2 ${copied ? 'text-green-600' : 'text-purple-600 hover:bg-purple-50'}`}
                   >
                     {copied ? <Check size={16} /> : <Share2 size={16} />}
-                    {copied ? 'Copied!' : t('copy')}
+                    {copied ? t('copied') : t('copy')}
                   </button>
                   <button
-                    onClick={generateLine}
+                    onClick={getRandomLine}
+                    disabled={isGenerating || isAIGenerating}
+                    className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium flex items-center gap-2"
+                  >
+                    <Smile size={16} />
+                    {t('generateLocal')}
+                  </button>
+                  <button
+                    onClick={generateLineAI}
                     disabled={isGenerating || isAIGenerating}
                     className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors font-medium flex items-center gap-2"
                   >
@@ -280,7 +328,7 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
                     ) : (
                       <>
                         <Play size={16} />
-                        {t('generateNewRizz')}
+                        {t('generateAI')}
                       </>
                     )}
                   </button>
@@ -289,14 +337,14 @@ const RizzGenerator: React.FC<RizzGeneratorProps> = ({ rizzData: propRizzData })
             )}
             {/* Main CTA */}
             <button
-              onClick={generateLine}
+              onClick={generateLineAI}
               disabled={isGenerating || isAIGenerating}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 rounded-xl text-xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
             >
               {isGenerating || isAIGenerating ? t('generatingBestRizzLines') : t('generateRizzLinesThatWork')}
             </button>
             <p className="text-sm text-gray-500 mt-3">
-              {t('generatedCount', { count: generatedCount })} • {t('noRegistration')}
+              {t('aiQuotaTip', { limit: RIZZ_DAILY_LIMIT, left: RIZZ_DAILY_LIMIT - usedCount })}
             </p>
           </div>
         </div>

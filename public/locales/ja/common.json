@@ -103,7 +103,7 @@
   "Dirty Pickup Lines to Make Her Laugh": "彼女を笑わせるための汚れたピックアップライン",
   "cuteRizzLines": "かわいいナンパフレーズ",
   "rizzPickupLines": "ナンパフレーズ",
-  "generateRizzLinesThatWork": "動作するRizzラインを生成します",
+  "generateRizzLinesThatWork": "効果的なリズ文を生成",
   "steamyRizzLines": "セクシーなナンパフレーズ",
   "creativeRizzLines": "クリエイティブなナンパフレーズ",
   "poeticRizzLines": "詩的なナンパフレーズ",
@@ -282,5 +282,9 @@
   "seoTitle": "seoTitle",
   "seoDescription": "seoDescription",
   "seoKeywords": "seoKeywords",
-  "generatingBestRizzLines": "generatingBestRizzLines"
+  "generatingBestRizzLines": "最高のリズ文を生成中...",
+  "generateLocal": "ローカル文生成",
+  "generateAI": "AI生成",
+  "aiQuotaTip": "毎日{{limit}}回AI生成無料、残り{{left}}回",
+  "generateRizzLinesThatWork": "効果的なリズ文を生成"
 }

@@ -272,5 +272,8 @@
   "funnyRizzLinesAlt": "A person laughing at a funny pickup line",
   "romanticRizzLinesAlt": "A couple sharing a romantic moment",
   "boldRizzLinesAlt": "A confident person delivering a bold line",
-  "classicRizzLinesAlt": "A classic dating scene"
+  "classicRizzLinesAlt": "A classic dating scene",
+  "generateLocal": "Generate Local Line",
+  "generateAI": "AI Generate",
+  "aiQuotaTip": "Free {{limit}} AI generations per day, {{left}} left today"
 }

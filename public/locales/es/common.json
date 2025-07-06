@@ -282,5 +282,8 @@
   "seoTitle": "seoTitle",
   "seoDescription": "seoDescription",
   "seoKeywords": "seoKeywords",
-  "generatingBestRizzLines": "generatingBestRizzLines"
+  "generatingBestRizzLines": "Generando las mejores frases Rizz...",
+  "generateLocal": "Generar frase local",
+  "generateAI": "Generar con IA",
+  "aiQuotaTip": "{{limit}} generaciones de IA gratis al día, quedan {{left}} hoy"
 }

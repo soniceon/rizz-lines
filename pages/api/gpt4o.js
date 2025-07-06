@@ -5,6 +5,14 @@ import path from 'path';
 // 添加调试日志
 console.log('API Token:', process.env.REPLICATE_API_TOKEN ? 'Token exists' : 'Token is missing');
 
+// ====== 简单IP+Map限流，每IP每天3次 ======
+const rateLimitMap = global.rateLimitMap || new Map();
+if (!global.rateLimitMap) global.rateLimitMap = rateLimitMap;
+
+function getClientIP(req) {
+  return req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.connection?.remoteAddress || '';
+}
+
 // 创建 Replicate 实例
 const replicate = new Replicate({
   auth: 'r8_2YwGt4quLK4vUAXG19huCkPr9hL211ibO6S',
@@ -125,6 +133,17 @@ function saveToHistory(language, category, line) {
 }
 
 export default async function handler(req, res) {
+  // ====== 限流逻辑开始 ======
+  const ip = getClientIP(req);
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `${ip}_${today}`;
+  const count = rateLimitMap.get(key) || 0;
+  if (count >= 3) {
+    return res.status(429).json({ error: '今日免费额度已用完，每天最多3次' });
+  }
+  rateLimitMap.set(key, count + 1);
+  // ====== 限流逻辑结束 ======
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

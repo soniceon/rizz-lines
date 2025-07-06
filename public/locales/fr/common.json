@@ -5,7 +5,7 @@
   "examples": "Exemples",
   "articles": "Articles",
   "copy": "Copier",
-  "copied": "Copié !",
+  "copied": "Copié!",
   "generate": "Générer",
   "generateMore": "Générer plus",
   "noRegistration": "Pas d'inscription requise",
@@ -35,7 +35,7 @@
   "copyLine": "Ligne de copie",
   "copiedLine": "Copié!",
   "generateNewRizz": "Générer de nouveaux rizz",
-  "generating": "Générateur...",
+  "generating": "Génération...",
   "aiGenerating": "Génération d'IA ...",
   "generatorWorksTitle": "Comment fonctionne notre générateur de lignes Rizz",
   "generatorWorksDesc": "Obtenez les meilleures lignes de ramassage en 3 étapes simples",
@@ -100,7 +100,7 @@
   "Dirty Pickup Lines to Make Her Laugh": "Les sales lignes de ramassage pour la faire rire",
   "cuteRizzLines": "Phrases de drague mignonnes",
   "rizzPickupLines": "Phrases d'accroche",
-  "generateRizzLinesThatWork": "Générer des lignes Rizz qui fonctionnent",
+  "generateRizzLinesThatWork": "Générez des phrases Rizz efficaces",
   "steamyRizzLines": "Phrases de drague chaudes",
   "creativeRizzLines": "Phrases de drague créatives",
   "poeticRizzLines": "Phrases de drague poétiques",
@@ -282,5 +282,8 @@
   "seoTitle": "seoTitle",
   "seoDescription": "seoDescription",
   "seoKeywords": "seoKeywords",
-  "generatingBestRizzLines": "generatingBestRizzLines"
+  "generatingBestRizzLines": "Génération des meilleures phrases Rizz...",
+  "generateLocal": "Générer une phrase locale",
+  "generateAI": "Génération IA",
+  "aiQuotaTip": "{{limit}} générations IA gratuites par jour, il en reste {{left}} aujourd'hui"
 }

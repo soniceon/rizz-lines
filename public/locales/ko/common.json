@@ -38,7 +38,7 @@
   "copyLine": "사본 문구",
   "copiedLine": "복사됨!",
   "generateNewRizz": "새로운 rizz를 생성하십시오",
-  "generating": "생성 ...",
+  "generating": "생성 중...",
   "aiGenerating": "AI 생성 ...",
   "generatorWorksTitle": "대화 문구 생성기의 작동 방식",
   "generatorWorksDesc": "3 가지 간단한 단계로 최고의 대화 문구를 얻으십시오",
@@ -103,7 +103,7 @@
   "Dirty Pickup Lines to Make Her Laugh": "그녀를 웃게 할 섹시한 대화 문구",
   "cuteRizzLines": "귀여운 대화 문구",
   "rizzPickupLines": "대화 문구",
-  "generateRizzLinesThatWork": "작동하는 대화 문구를 생성하십시오",
+  "generateRizzLinesThatWork": "작동하는 대화 문구 생성",
   "steamyRizzLines": "섹시한 대화 문구",
   "creativeRizzLines": "창의적인 대화 문구",
   "poeticRizzLines": "시적인 대화 문구",
@@ -141,5 +141,9 @@
   "howToUseRizzLinesEffectivelyDesc": "대화 문구를 효과적으로 사용하려면 자신감과 타이밍이 중요합니다. 자신의 성격과 상황에 맞는 문구를 선택하세요. 최고의 대화 문구는 미소로 전달됩니다! 직접 또는 데이트 앱에서 시도해보세요.",
   "howToUseRizzLinesEffectivelyAlt": "대화 문구를 효과적으로 사용하는 커플",
   "wantMoreInspiration": "더 많은 영감을 원하십니까? Rizz Line Generator에서 더 많은 문구와 플러팅 아이디어를 얻어보세요!",
-  "contents": "내용"
+  "contents": "내용",
+  "generateLocal": "로컬 문구 생성",
+  "generateAI": "AI 생성",
+  "aiQuotaTip": "매일 무료로 {{limit}}번 AI 문구 생성, 오늘 남은 {{left}}번",
+  "generatingBestRizzLines": "최고의 대화 문구 생성 중..."
 }

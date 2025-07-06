@@ -99,7 +99,7 @@
   "Dirty Pickup Lines to Make Her Laugh": "Schmutzige Anmachsprüche, um sie zum Lachen zu bringen",
   "cuteRizzLines": "Süße Anmachsprüche",
   "rizzPickupLines": "Anmachsprüche",
-  "generateRizzLinesThatWork": "Erzeugen Sie Anmachsprüche, die funktionieren",
+  "generateRizzLinesThatWork": "Erzeugen Sie funktionierende Rizz-Sprüche",
   "steamyRizzLines": "Heiße Anmachsprüche",
   "creativeRizzLines": "Kreative Anmachsprüche",
   "poeticRizzLines": "Poetische Anmachsprüche",
@@ -280,5 +280,8 @@
   "seoTitle": "Anmachsprüche Generator - Kreative Flirtsprüche für jeden Anlass",
   "seoDescription": "Entdecken Sie unseren Anmachsprüche Generator für kreative und effektive Flirtsprüche",
   "seoKeywords": "Anmachsprüche, Flirtsprüche, Dating, Romantik, Generator",
-  "generatingBestRizzLines": "Generiere die besten Anmachsprüche"
+  "generatingBestRizzLines": "Generiere beste Rizz-Sprüche...",
+  "generateLocal": "Lokale Zeile generieren",
+  "generateAI": "KI-Generierung",
+  "aiQuotaTip": "Täglich {{limit}} kostenlose KI-Generierungen, heute verbleibend: {{left}}"
 }

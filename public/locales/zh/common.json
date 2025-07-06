@@ -140,5 +140,8 @@
   "howToUseRizzLinesEffectivelyDesc": "高效使用搭讪话术的关键是自信和时机。选择适合你性格和场合的话术，微笑着说出最好的搭讪话术！无论是线下还是在交友软件上都可以尝试。",
   "howToUseRizzLinesEffectivelyAlt": "一对情侣在咖啡馆愉快交谈",
   "wantMoreInspiration": "想要更多灵感？试试Rizz Line Generator获取更多搭讪话术和灵感！",
-  "contents": "内容"
+  "contents": "内容",
+  "generateLocal": "生成本地话术",
+  "generateAI": "AI生成",
+  "aiQuotaTip": "每日免费生成{{limit}}次AI话术，今日剩余{{left}}次"
 }
