@@ -1,5 +1,47 @@
 User-agent: *
 Disallow: /api
+Disallow: /admin
+Disallow: /private
 Allow: /
 
-Sitemap: https://www.rizzlines.org/sitemap.xml 
+User-agent: GPTBot
+Disallow: /api
+Disallow: /admin
+Allow: /
+
+User-agent: Googlebot
+Disallow: /api
+Disallow: /admin
+Allow: /
+
+User-agent: ChatGPT-User
+Disallow: /api
+Disallow: /admin
+Allow: /
+
+User-agent: CCBot
+Disallow: /api
+Disallow: /admin
+Allow: /
+
+User-agent: PerplexityBot
+Disallow: /api
+Disallow: /admin
+Allow: /
+
+User-agent: Applebot
+Disallow: /api
+Disallow: /admin
+Allow: /
+
+User-agent: Amazonbot
+Disallow: /api
+Disallow: /admin
+Allow: /
+
+User-agent: Bytespider
+Disallow: /api
+Disallow: /admin
+Allow: /
+
+Sitemap: https://rizzlines.org/sitemap.xml 

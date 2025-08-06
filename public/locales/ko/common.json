@@ -145,5 +145,8 @@
   "generateLocal": "로컬 문구 생성",
   "generateAI": "AI 생성",
   "aiQuotaTip": "매일 무료로 {{limit}}번 AI 문구 생성, 오늘 남은 {{left}}번",
-  "generatingBestRizzLines": "최고의 대화 문구 생성 중..."
+  "generatingBestRizzLines": "최고의 대화 문구 생성 중...",
+  "seoTitle": "최고의 Rizz Lines 생성기 - 1000+ 효과적인 픽업 라인 무료",
+  "seoDescription": "AI 픽업 라인 생성기를 사용하여 1000+ 검증된 효과적인 픽업 라인을 얻으세요. 부드럽고, 재미있고, 로맨틱하고, 대담한 스타일을 지원합니다. 무료 사용, 등록 불필요, 지금 완벽한 픽업 라인을 생성하세요!",
+  "seoKeywords": "픽업 라인,대화 문구 생성기,대화 문구,플러팅 문구,데이트 문구,AI 픽업 라인,무료 픽업 라인,부드러운 픽업 라인,재미있는 픽업 라인,로맨틱 픽업 라인"
 }

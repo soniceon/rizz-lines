@@ -11,6 +11,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Script
         strategy="afterInteractive"
         src="https://www.googletagmanager.com/gtag/js?id=G-3XCWJ06NVF"
+        onLoad={() => {
+          console.log('Google Analytics script loaded successfully');
+        }}
+        onError={(e) => {
+          console.error('Google Analytics script failed to load:', e);
+        }}
       />
       <Script
         id="google-analytics"
@@ -21,7 +27,27 @@ function MyApp({ Component, pageProps }: AppProps) {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-3XCWJ06NVF');
+            gtag('config', 'G-3XCWJ06NVF', {
+              page_title: document.title,
+              page_location: window.location.href,
+            });
+            
+            console.log('Google Analytics initialized');
+          `,
+        }}
+      />
+      {/* Additional verification for Google Search Console */}
+      <Script
+        id="ga-verification"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            // Ensure GA is available for verification
+            if (typeof gtag !== 'undefined') {
+              console.log('GA verification: gtag function is available');
+            } else {
+              console.log('GA verification: gtag function not available');
+            }
           `,
         }}
       />
