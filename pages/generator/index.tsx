@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
+import Head from 'next/head';
 import rizzData from '../../rizzlines.json';
 import SiteHeader from '../../components/SiteHeader';
 import SiteFooter from '../../components/SiteFooter';
@@ -96,6 +97,11 @@ export default function GeneratorIndex() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Head>
+        <title>Rizz Lines Generator - Pickup Lines Categories</title>
+        <meta name="description" content="Browse all categories of rizz lines and pickup lines. Find the perfect category for your situation." />
+        <link rel="canonical" href="https://rizzlines.org/generator" />
+      </Head>
       <SiteHeader />
       <main className="container mx-auto px-4">
         <h1 className="text-3xl font-bold mb-6 text-center">{t('categoriesTitle')}</h1>

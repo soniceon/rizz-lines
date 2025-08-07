@@ -112,6 +112,7 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:type" content="website" />
+        <link rel="canonical" href={`https://rizzlines.org/generator/${category}`} />
       </Head>
 
       <SiteHeader />

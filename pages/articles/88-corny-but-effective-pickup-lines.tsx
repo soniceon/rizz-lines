@@ -48,7 +48,7 @@ export default function Article88() {
         <meta property="og:description" content={t('article88Desc')} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content="/articles/1.jpg" />
-        <link rel="canonical" href="https://www.yoursite.com/articles/88-corny-but-effective-pickup-lines" />
+        <link rel="canonical" href="https://rizzlines.org/articles/88-corny-but-effective-pickup-lines" />
       </Head>
       <SiteHeader />
       <main className="w-full max-w-2xl mx-auto flex-1 py-8 px-4">

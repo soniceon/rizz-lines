@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import SiteHeader from '../../components/SiteHeader';
 import SiteFooter from '../../components/SiteFooter';
 import { useTranslation } from 'next-i18next';
@@ -36,6 +37,11 @@ export default function ArticlesIndex() {
   ];
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <Head>
+        <title>Rizz Lines Articles - Pickup Lines Guides</title>
+        <meta name="description" content="Read our comprehensive guides on rizz lines and pickup lines. Learn how to use them effectively." />
+        <link rel="canonical" href="https://rizzlines.org/articles" />
+      </Head>
       {/* 页面顶部插入<SiteHeader /> */}
       <SiteHeader />
       {/* 内容区 */}
