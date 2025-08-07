@@ -41,7 +41,8 @@ const slugify = (text: string) =>
     .trim()
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-');
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
 
 // Helper function to de-slugify a URL component back to a title
 const unslugify = (slug: string) => {
@@ -73,6 +74,9 @@ const CATEGORY_KEY_MAP: { [key: string]: string } = {
   'cute rizz lines': 'cuteRizzLines',
   'dirty pickup lines to use on girl over text': 'dirtyPickupLinesToUseOnGirlOverText',
   'dirty pickup lines to make her laugh': 'dirtyPickupLinesToMakeHerLaugh',
+  'deutsche anmachsprche': 'germanPickUpLines', // Handle URL encoding issue
+  'frases para ligar en espaol': 'spanishPickUpLines', // Handle URL encoding issue
+  'phrases daccroche en franais': 'frenchPickUpLines', // Handle URL encoding issue
 };
 
 const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategories }) => {
