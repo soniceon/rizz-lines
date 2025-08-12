@@ -85,9 +85,11 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { t } = useTranslation();
 
-  console.log('category:', category);
-  console.log('allLines:', allLines);
-  console.log('allCategories:', allCategories);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('category:', category);
+    console.log('allLines length:', allLines?.length);
+    console.log('allCategories length:', allCategories?.length);
+  }
 
   useEffect(() => {
     if (allLines) {
@@ -111,12 +113,17 @@ const RizzGeneratorPage: NextPage<PageProps> = ({ category, allLines, allCategor
   return (
     <>
       <Head>
-        <title>{pageTitle}</title>
-        <meta name="description" content={metaDescription} />
+        <title>{t('categoryGeneratorTitle', { category })} | Rizz Lines Generator</title>
+        <meta name="description" content={t('categoryGeneratorDesc')} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:type" content="website" />
         <link rel="canonical" href={`https://rizzlines.org/generator/${category}`} />
+        {/* hreflang for locales */}
+        {['en','zh','ja','ko','fr','de','es','pt','ru'].map(loc => (
+          <link key={loc} rel="alternate" hrefLang={loc} href={`https://rizzlines.org/${loc}/generator/${slugify(category)}`} />
+        ))}
+        <link rel="alternate" hrefLang="x-default" href={`https://rizzlines.org/generator/${slugify(category)}`} />
       </Head>
 
       <SiteHeader />
@@ -195,6 +202,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     cat.slug !== '' && 
     cat.slug !== '-'
   );
+  
+  // 确保所有语言版本都有对应的路径
   const locales = ['en', 'zh', 'ja', 'ko', 'fr', 'de', 'ru', 'es', 'pt'];
   const paths = locales.flatMap(locale => 
     validCategories.map(cat => ({
@@ -202,33 +211,62 @@ export const getStaticPaths: GetStaticPaths = async () => {
       locale
     }))
   );
+  
+  // 添加默认语言路径（不带locale前缀）
+  const defaultPaths = validCategories.map(cat => ({
+    params: { category: cat.slug },
+    locale: undefined
+  }));
+  
+  const allPaths = [...paths, ...defaultPaths];
+  
+  console.log('Generated paths:', allPaths.length);
+  
   return {
-    paths,
-    fallback: false
+    paths: allPaths,
+    fallback: 'blocking' // 改为blocking以支持动态生成
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params, locale = 'en' }) => {
-  const category = Object.keys(rizzData as RizzCategory).find(cat => slugify(cat) === params?.category);
-  if (!category) {
-    throw new Error('Category not found for params: ' + JSON.stringify(params));
-  }
-  const allLines = (rizzData as RizzCategory)[category];
-  if (!allLines || allLines.length === 0) {
-    throw new Error('allLines is empty for category: ' + category);
-  }
-  const allCategories = Object.keys(rizzData as RizzCategory).map(cat => ({
-    name: cat,
-    slug: slugify(cat)
-  }));
-  return {
-    props: {
-      category,
-      allLines,
-      allCategories,
-      ...(await serverSideTranslations(locale, ['common']))
+  try {
+    const category = Object.keys(rizzData as RizzCategory).find(cat => slugify(cat) === params?.category);
+    
+    if (!category) {
+      console.error('Category not found for params:', params);
+      return {
+        notFound: true
+      };
     }
-  };
+    
+    const allLines = (rizzData as RizzCategory)[category];
+    if (!allLines || allLines.length === 0) {
+      console.error('allLines is empty for category:', category);
+      return {
+        notFound: true
+      };
+    }
+    
+    const allCategories = Object.keys(rizzData as RizzCategory).map(cat => ({
+      name: cat,
+      slug: slugify(cat)
+    }));
+    
+    return {
+      props: {
+        category,
+        allLines,
+        allCategories,
+        ...(await serverSideTranslations(locale, ['common']))
+      },
+      revalidate: 3600 // 1小时重新验证
+    };
+  } catch (error) {
+    console.error('Error in getStaticProps:', error);
+    return {
+      notFound: true
+    };
+  }
 };
 
 export default RizzGeneratorPage; 

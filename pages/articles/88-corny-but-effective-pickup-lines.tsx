@@ -10,13 +10,15 @@ export default function Article88() {
   const [lines, setLines] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log('当前语言:', i18n.language);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('当前语言:', i18n.language);
+    }
     fetch(`/locales/${i18n.language}/pickup-lines.json`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
           setLines(data);
-          console.log('lines数据(Array):', data);
+          if (process.env.NODE_ENV !== 'production') console.log('lines数据(Array):', data);
         } else if (typeof data === 'object') {
           const arr = Object.keys(data)
             .sort((a, b) => {
@@ -26,7 +28,7 @@ export default function Article88() {
             })
             .map((k) => data[k]);
           setLines(arr);
-          console.log('lines数据(Object):', arr);
+          if (process.env.NODE_ENV !== 'production') console.log('lines数据(Object):', arr);
         }
       });
   }, [i18n.language]);
@@ -38,7 +40,7 @@ export default function Article88() {
     { title: t('classicRizzLines'), img: '/articles/4.jpg', alt: t('classicRizzLinesAlt'), start: 66, end: 88 }
   ];
 
-  console.log('groups:', groups);
+  if (process.env.NODE_ENV !== 'production') console.log('groups:', groups);
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Head>

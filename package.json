@@ -6,7 +6,12 @@
     "dev": "next dev",
     "check:slugs": "node check_rizzlines_slugs.js",
     "build": "npm run check:slugs && next build",
-    "start": "next start"
+    "start": "next start",
+    "build:test": "node scripts/build-and-test.js",
+    "test:build": "next build && echo '✅ 构建成功'",
+    "test:start": "next start",
+    "clean": "rm -rf .next out",
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.5",

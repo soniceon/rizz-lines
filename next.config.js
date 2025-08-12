@@ -16,10 +16,51 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const { i18n } = require('./next-i18next.config');
+
 module.exports = {
   i18n,
+
+  // 图片优化
+  images: {
+    domains: ['rizzlines.org'],
+    formats: ['image/webp', 'image/avif'],
+  },
+  // 压缩配置
+  compress: true,
+  // 生产环境优化
+  swcMinify: true,
+  // 添加安全头
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+        ],
+      },
+    ];
+  },
+  // 重定向配置
+  async redirects() {
+    return [
+      {
+        source: '/generator',
+        destination: '/generator/best-rizz-lines',
+        permanent: true,
+      },
+    ];
+  },
 };
 
-console.log('Next.js 构建环境变量:', process.env);
 console.log('Next.js i18n 配置:', module.exports?.i18n);
-console.log('Next.js 页面路径:', module.exports?.pageExtensions);

@@ -3,45 +3,57 @@ Disallow: /api
 Disallow: /admin
 Disallow: /private
 Allow: /
+Allow: /api/sitemap.xml
 
 User-agent: GPTBot
 Disallow: /api
 Disallow: /admin
 Allow: /
+Allow: /api/sitemap.xml
 
 User-agent: Googlebot
 Disallow: /api
 Disallow: /admin
 Allow: /
+Allow: /api/sitemap.xml
 
 User-agent: ChatGPT-User
 Disallow: /api
 Disallow: /admin
 Allow: /
+Allow: /api/sitemap.xml
 
 User-agent: CCBot
 Disallow: /api
 Disallow: /admin
 Allow: /
+Allow: /api/sitemap.xml
 
 User-agent: PerplexityBot
 Disallow: /api
 Disallow: /admin
 Allow: /
+Allow: /api/sitemap.xml
 
 User-agent: Applebot
 Disallow: /api
 Disallow: /admin
 Allow: /
+Allow: /api/sitemap.xml
 
 User-agent: Amazonbot
 Disallow: /api
 Disallow: /admin
 Allow: /
+Allow: /api/sitemap.xml
 
 User-agent: Bytespider
 Disallow: /api
 Disallow: /admin
 Allow: /
+Allow: /api/sitemap.xml
 
+# 动态站点地图
+Sitemap: https://rizzlines.org/api/sitemap.xml
+# 静态站点地图（备用）
 Sitemap: https://rizzlines.org/sitemap.xml 

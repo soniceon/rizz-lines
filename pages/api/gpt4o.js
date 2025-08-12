@@ -2,8 +2,10 @@ import Replicate from 'replicate';
 import fs from 'fs';
 import path from 'path';
 
-// 添加调试日志
-console.log('API Token:', process.env.REPLICATE_API_TOKEN ? 'Token exists' : 'Token is missing');
+// 生产环境避免打印敏感信息
+if (process.env.NODE_ENV !== 'production') {
+  console.log('API Token set:', Boolean(process.env.REPLICATE_API_TOKEN));
+}
 
 // ====== 简单IP+Map限流，每IP每天3次 ======
 const rateLimitMap = global.rateLimitMap || new Map();
@@ -15,7 +17,7 @@ function getClientIP(req) {
 
 // 创建 Replicate 实例
 const replicate = new Replicate({
-  auth: 'r8_2YwGt4quLK4vUAXG19huCkPr9hL211ibO6S',
+  auth: process.env.REPLICATE_API_TOKEN || '',
 });
 
 // 清理中文内容，移除拼音和英文解释
