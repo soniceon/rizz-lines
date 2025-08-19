@@ -59,6 +59,28 @@ module.exports = {
         destination: '/generator/best-rizz-lines',
         permanent: true,
       },
+      // 语言路径重定向，避免404
+      {
+        source: '/zh/generator',
+        destination: '/zh/generator/best-rizz-lines',
+        permanent: true,
+      },
+      {
+        source: '/ja/generator',
+        destination: '/ja/generator/best-rizz-lines',
+        permanent: true,
+      },
+      {
+        source: '/ko/generator',
+        destination: '/ko/generator/best-rizz-lines',
+        permanent: true,
+      },
+      // 旧URL重定向到新URL
+      {
+        source: '/generator/best-rizz-lines',
+        destination: '/generator/best-rizz-lines',
+        permanent: false,
+      },
     ];
   },
 };

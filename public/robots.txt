@@ -56,4 +56,8 @@ Allow: /api/sitemap.xml
 # 动态站点地图
 Sitemap: https://rizzlines.org/api/sitemap.xml
 # 静态站点地图（备用）
-Sitemap: https://rizzlines.org/sitemap.xml 
+Sitemap: https://rizzlines.org/sitemap.xml
+# 语言特定站点地图
+Sitemap: https://rizzlines.org/zh/sitemap.xml
+Sitemap: https://rizzlines.org/ja/sitemap.xml
+Sitemap: https://rizzlines.org/ko/sitemap.xml 

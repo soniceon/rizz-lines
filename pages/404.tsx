@@ -27,6 +27,7 @@ const Custom404: NextPage = () => {
         <title>404 - {t('notFound')} | Rizz Lines Generator</title>
         <meta name="description" content="Page not found. Return to our rizz lines generator to create amazing pickup lines." />
         <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://rizzlines.org/404" />
       </Head>
 
       <SiteHeader />
