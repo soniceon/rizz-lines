@@ -29,6 +29,10 @@ module.exports = {
   compress: true,
   // 生产环境优化
   swcMinify: true,
+  // 启用ISR支持
+  experimental: {
+    isrMemoryCacheSize: 0,
+  },
   // 添加安全头
   async headers() {
     return [
@@ -46,6 +50,28 @@ module.exports = {
           {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'X-Robots-Tag',
+            value: 'index, follow',
+          },
+        ],
+      },
+      {
+        source: '/api/sitemap.xml',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=3600',
+          },
+        ],
+      },
+      {
+        source: '/api/generator/sitemap.xml',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=3600',
           },
         ],
       },
@@ -79,6 +105,23 @@ module.exports = {
       {
         source: '/generator/best-rizz-lines',
         destination: '/generator/best-rizz-lines',
+        permanent: false,
+      },
+      // 避免404的重定向
+      {
+        source: '/zh/88-corny-but-effective-pickup-lines',
+        destination: '/ko/88-corny-but-effective-pickup-lines',
+        permanent: false,
+      },
+      // 站点地图重定向
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap.xml',
+        permanent: false,
+      },
+      {
+        source: '/generator/sitemap.xml',
+        destination: '/api/generator/sitemap.xml',
         permanent: false,
       },
     ];

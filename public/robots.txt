@@ -2,62 +2,75 @@ User-agent: *
 Disallow: /api
 Disallow: /admin
 Disallow: /private
+Disallow: /_next
+Disallow: /404
+Disallow: /500
 Allow: /
 Allow: /api/sitemap.xml
 
 User-agent: GPTBot
 Disallow: /api
 Disallow: /admin
+Disallow: /_next
 Allow: /
 Allow: /api/sitemap.xml
 
 User-agent: Googlebot
 Disallow: /api
 Disallow: /admin
+Disallow: /_next
 Allow: /
 Allow: /api/sitemap.xml
 
 User-agent: ChatGPT-User
 Disallow: /api
 Disallow: /admin
+Disallow: /_next
 Allow: /
 Allow: /api/sitemap.xml
 
 User-agent: CCBot
 Disallow: /api
 Disallow: /admin
+Disallow: /_next
 Allow: /
 Allow: /api/sitemap.xml
 
 User-agent: PerplexityBot
 Disallow: /api
 Disallow: /admin
+Disallow: /_next
 Allow: /
 Allow: /api/sitemap.xml
 
 User-agent: Applebot
 Disallow: /api
 Disallow: /admin
+Disallow: /_next
 Allow: /
 Allow: /api/sitemap.xml
 
 User-agent: Amazonbot
 Disallow: /api
 Disallow: /admin
+Disallow: /_next
 Allow: /
 Allow: /api/sitemap.xml
 
 User-agent: Bytespider
 Disallow: /api
 Disallow: /admin
+Disallow: /_next
 Allow: /
 Allow: /api/sitemap.xml
 
-# 动态站点地图
+# 主要站点地图
 Sitemap: https://rizzlines.org/api/sitemap.xml
 # 静态站点地图（备用）
 Sitemap: https://rizzlines.org/sitemap.xml
 # 语言特定站点地图
 Sitemap: https://rizzlines.org/zh/sitemap.xml
 Sitemap: https://rizzlines.org/ja/sitemap.xml
-Sitemap: https://rizzlines.org/ko/sitemap.xml 
+Sitemap: https://rizzlines.org/ko/sitemap.xml
+# 类别站点地图
+Sitemap: https://rizzlines.org/generator/sitemap.xml 

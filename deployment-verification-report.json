@@ -1,0 +1,95 @@
+{
+  "timestamp": "2025-08-22T02:45:54.461Z",
+  "summary": {
+    "totalFiles": 12,
+    "existingFiles": 12,
+    "missingFiles": 0,
+    "configValid": 5,
+    "configTotal": 5,
+    "apiValid": 2,
+    "apiTotal": 2,
+    "seoValid": 4,
+    "seoTotal": 4
+  },
+  "details": {
+    "structure": {
+      "existingFiles": [
+        "pages/api/sitemap.xml.ts",
+        "pages/api/generator/sitemap.xml.ts",
+        "public/robots.txt",
+        "public/sitemap.xml",
+        "components/SEOHead.tsx",
+        "next.config.js",
+        "pages/404.tsx",
+        "pages/500.tsx",
+        "pages/zh/index.tsx",
+        "pages/ja/index.tsx",
+        "pages/ko/index.tsx",
+        "pages/generator/[category].tsx"
+      ],
+      "missingFiles": []
+    },
+    "config": [
+      {
+        "file": "next.config.js",
+        "check": "ISR支持",
+        "valid": true
+      },
+      {
+        "file": "next.config.js",
+        "check": "重定向规则",
+        "valid": true
+      },
+      {
+        "file": "next.config.js",
+        "check": "安全头",
+        "valid": true
+      },
+      {
+        "file": "public/robots.txt",
+        "check": "站点地图引用",
+        "valid": true
+      },
+      {
+        "file": "public/robots.txt",
+        "check": "爬虫规则",
+        "valid": true
+      }
+    ],
+    "api": [
+      {
+        "endpoint": "/api/sitemap.xml",
+        "filePath": "pages/api/sitemap.xml.ts",
+        "exists": true
+      },
+      {
+        "endpoint": "/api/generator/sitemap.xml",
+        "filePath": "pages/api/generator/sitemap.xml.ts",
+        "exists": true
+      }
+    ],
+    "seo": [
+      {
+        "file": "components/SEOHead.tsx",
+        "check": "基础SEO",
+        "valid": true
+      },
+      {
+        "file": "components/SEOHead.tsx",
+        "check": "Open Graph",
+        "valid": true
+      },
+      {
+        "file": "components/SEOHead.tsx",
+        "check": "Twitter Card",
+        "valid": true
+      },
+      {
+        "file": "components/SEOHead.tsx",
+        "check": "结构化数据",
+        "valid": true
+      }
+    ]
+  },
+  "recommendations": []
+}

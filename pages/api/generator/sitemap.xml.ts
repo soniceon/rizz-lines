@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import rizzData from '../../public/rizzlines.json';
+import rizzData from '../../../public/rizzlines.json';
 
 // 根据实际数据结构定义类型
 type RizzData = {
@@ -29,68 +29,35 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const baseUrl = 'https://rizzlines.org';
     const currentDate = new Date().toISOString().split('T')[0];
     
-    // 基础页面
-    const basePages = [
-      { url: '/', priority: '1.0', changefreq: 'daily' },
-      { url: '/generator', priority: '0.9', changefreq: 'weekly' },
-      { url: '/articles', priority: '0.8', changefreq: 'weekly' },
-      { url: '/404', priority: '0.1', changefreq: 'monthly' },
-      { url: '/500', priority: '0.1', changefreq: 'monthly' },
-    ];
-
-    // 语言页面
-    const locales = ['en', 'zh', 'ja', 'ko', 'fr', 'de', 'ru', 'es', 'pt'];
-    const languagePages = locales.map(locale => ({
-      url: `/${locale}`,
-      priority: '0.9',
-      changefreq: 'daily'
-    }));
-
     // 类别页面 - 包含所有语言版本
     const categories = Object.keys(rizzData as RizzData);
     const categoryPages = categories.flatMap(category => {
       const slug = slugify(category);
       if (!slug) return [];
       
+      const locales = ['en', 'zh', 'ja', 'ko', 'fr', 'de', 'ru', 'es', 'pt'];
+      
       // 为每个类别创建所有语言版本的URL
-      return locales.map(locale => ({
+      const localizedUrls = locales.map(locale => ({
         url: `/${locale}/generator/${slug}`,
         priority: '0.8',
         changefreq: 'weekly'
       }));
-    });
-
-    // 默认语言类别页面（不带locale前缀）
-    const defaultCategoryPages = categories.flatMap(category => {
-      const slug = slugify(category);
-      if (!slug) return [];
       
-      return [{
+      // 添加默认语言URL（不带locale前缀）
+      localizedUrls.push({
         url: `/generator/${slug}`,
         priority: '0.8',
         changefreq: 'weekly'
-      }];
+      });
+      
+      return localizedUrls;
     });
-
-    // 特殊页面
-    const specialPages = [
-      { url: '/zh/88-corny-but-effective-pickup-lines', priority: '0.7', changefreq: 'monthly' },
-      { url: '/ko/88-corny-but-effective-pickup-lines', priority: '0.7', changefreq: 'monthly' },
-    ];
-
-    // 合并所有页面
-    const allPages = [
-      ...basePages,
-      ...languagePages,
-      ...categoryPages,
-      ...defaultCategoryPages,
-      ...specialPages
-    ];
 
     // 生成XML
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allPages.map(page => `
+${categoryPages.map(page => `
   <url>
     <loc>${baseUrl}${page.url}</loc>
     <lastmod>${currentDate}</lastmod>
@@ -103,7 +70,7 @@ ${allPages.map(page => `
     res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
     res.status(200).send(xml);
   } catch (error) {
-    console.error('Error generating sitemap:', error);
-    res.status(500).json({ message: 'Error generating sitemap' });
+    console.error('Error generating generator sitemap:', error);
+    res.status(500).json({ message: 'Error generating generator sitemap' });
   }
 } 
